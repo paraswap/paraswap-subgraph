@@ -1,9 +1,3 @@
-type ExampleEntity @entity {
-  id: ID!
-  count: BigInt!
-  adapter: Bytes! # address
-}
-
 enum Side {
   Sell
   Buy
