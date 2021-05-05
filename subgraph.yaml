@@ -1,5 +1,6 @@
 specVersion: 0.0.2
 description: Swaps made on ParaSwap
+repository: https://github.com/paraswap/paraswap-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
