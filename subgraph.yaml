@@ -1,16 +1,16 @@
 specVersion: 0.0.2
 description: Swaps made on ParaSwap
-repository: https://github.com/paraswap/paraswap-subgraph
+repository: {{REPO}}
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: AugustusSwapperV4
-    network: mainnet
+    network: {{NETWORK}}
     source:
-      address: "0x1bD435F3C054b6e901B7b108a0ab7617C808677b"
+      address: "{{ADDRESS}}"
       abi: AugustusSwapperV4
-      startBlock: 12161435
+      startBlock: {{BLOCK_NUMBER}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
