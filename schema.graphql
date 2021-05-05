@@ -3,3 +3,32 @@ type ExampleEntity @entity {
   count: BigInt!
   adapter: Bytes! # address
 }
+
+enum Side {
+  Sell
+  Buy
+}
+
+type Swap @entity {
+  id: ID!
+  augustus: Bytes! # address
+  augustusVersion: String!
+  side: Side!
+  method: String!
+  initiator: Bytes! # address
+  beneficiary: Bytes! # address
+  srcToken: Bytes! # address
+  destToken: Bytes! # address
+  srcAmount: BigInt!
+  destAmount: BigInt!
+  expectedAmount: BigInt
+  referrer: String!
+  txHash: Bytes!
+  txOrigin: Bytes! # address
+  txTarget: Bytes # address
+  txGasUsed: BigInt!
+  txGasPrice: BigInt!
+  blockHash: Bytes!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}
