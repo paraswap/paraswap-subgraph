@@ -1,13 +1,13 @@
 {
-  "name": "paraswap-subgraph-{{NAME}}",
+  "name": "paraswap-subgraph-polygon",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ paraswap/paraswap-subgraph-{{NAME}}",
-    "create-local": "graph create --node http://localhost:8020/ paraswap/paraswap-subgraph-{{NAME}}",
-    "remove-local": "graph remove --node http://localhost:8020/ paraswap/paraswap-subgraph-{{NAME}}",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 paraswap/paraswap-subgraph-{{NAME}}"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ paraswap/paraswap-subgraph-polygon",
+    "create-local": "graph create --node http://localhost:8020/ paraswap/paraswap-subgraph-polygon",
+    "remove-local": "graph remove --node http://localhost:8020/ paraswap/paraswap-subgraph-polygon",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 paraswap/paraswap-subgraph-polygon"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.20.0",

@@ -1,16 +1,16 @@
 specVersion: 0.0.2
 description: Swaps made on ParaSwap
-repository: {{REPO}}
+repository: https://github.com/paraswap/paraswap-subgraph/tree/polygon
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: AugustusSwapperV4
-    network: {{NETWORK}}
+    network: matic
     source:
-      address: "{{ADDRESS}}"
+      address: "0x90249ed4d69D70E709fFCd8beE2c5A566f65dADE"
       abi: AugustusSwapperV4
-      startBlock: {{BLOCK_NUMBER}}
+      startBlock: 13049712
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
