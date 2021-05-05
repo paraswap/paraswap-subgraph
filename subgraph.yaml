@@ -25,13 +25,4 @@ dataSources:
           handler: handleBought
         - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
           handler: handleSwapped
-      callHandlers:
-        - function: swapOnUniswap(uint256,uint256,address[],uint8)
-          handler: handleSwapOnUniswap
-        - function: swapOnUniswapFork(address,bytes32,uint256,uint256,address[],uint8)
-          handler: handleSwapOnUniswapFork
-        - function: buyOnUniswap(uint256,uint256,address[],uint8)
-          handler: handleBuyOnUniswap
-        - function: buyOnUniswapFork(address,bytes32,uint256,uint256,address[],uint8)
-          handler: handleBuyOnUniswapFork
       file: ./src/mappingV4.ts
