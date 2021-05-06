@@ -5,6 +5,50 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
+    name: AugustusSwapperV2
+    network: mainnet
+    source:
+      address: "0x9509665d015Bfe3C77AA5ad6Ca20C8Afa1d98989"
+      abi: AugustusSwapperV2
+      startBlock: 10952443
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+      abis:
+        - name: AugustusSwapperV2
+          file: ./abis/AugustusSwapperV2.json
+      eventHandlers:
+        - event: Bought(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
+          handler: handleBought
+        - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
+          handler: handleSwapped
+      file: ./src/mappingV2.ts
+  - kind: ethereum/contract
+    name: AugustusSwapperV3
+    network: mainnet
+    source:
+      address: "0xf90e98F3D8Dce44632E5020ABF2E122E0f99DFAb"
+      abi: AugustusSwapperV3
+      startBlock: 11707760
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+      abis:
+        - name: AugustusSwapperV3
+          file: ./abis/AugustusSwapperV3.json
+      eventHandlers:
+        - event: Bought(address,indexed address,indexed address,indexed address,uint256,uint256,string)
+          handler: handleBought
+        - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
+          handler: handleSwapped
+      file: ./src/mappingV3.ts
+  - kind: ethereum/contract
     name: AugustusSwapperV4
     network: mainnet
     source:
