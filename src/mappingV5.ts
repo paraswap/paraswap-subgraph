@@ -45,7 +45,7 @@ export function handleBought(event: Bought): void {
     let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
     swap.uuid = event.params.uuid;
     swap.augustus = event.address;
-    swap.augustusVersion = '4.0.0';
+    swap.augustusVersion = '5.0.0';
     swap.side = 'Buy';
     swap.method = 'event';
     swap.initiator = event.params.initiator;
