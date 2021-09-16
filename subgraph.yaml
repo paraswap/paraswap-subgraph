@@ -26,3 +26,26 @@ dataSources:
         - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
           handler: handleSwapped
       file: ./src/mappingV4.ts
+
+  - kind: ethereum/contract
+    name: AugustusSwapperV5
+    network: matic
+    source:
+      address: "0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57"
+      abi: AugustusSwapperV5
+      startBlock: 18118967
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+      abis:
+        - name: AugustusSwapperV5
+          file: ./abis/AugustusSwapperV5.json
+      eventHandlers:
+        - event: Swapped(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleSwapped
+        - event: Bought(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleBought
+      file: ./src/mappingV5.ts

@@ -5,6 +5,7 @@ enum Side {
 
 type Swap @entity {
   id: ID!
+  uuid: Bytes
   augustus: Bytes! # address
   augustusVersion: String!
   side: Side!
@@ -16,7 +17,7 @@ type Swap @entity {
   srcAmount: BigInt!
   destAmount: BigInt!
   expectedAmount: BigInt
-  referrer: String!
+  referrer: String
   txHash: Bytes!
   txOrigin: Bytes! # address
   txTarget: Bytes # address
