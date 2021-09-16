@@ -79,3 +79,42 @@ dataSources:
         - function: buyOnUniswapFork(address,bytes32,uint256,uint256,address[],uint8)
           handler: handleBuyOnUniswapFork
       file: ./src/mappingV4.ts
+  - kind: ethereum/contract
+    name: AugustusSwapperV5
+    network: mainnet
+    source:
+      address: "0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57"
+      abi: AugustusSwapperV5
+      startBlock: 13049291
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+      abis:
+        - name: AugustusSwapperV5
+          file: ./abis/AugustusSwapperV5.json
+      eventHandlers:
+        - event: Swapped(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleSwapped
+        - event: Bought(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleBought
+      callHandlers:
+        - function: swapOnUniswap(uint256,uint256,address[])
+          handler: handleSwapOnUniswap
+        - function: swapOnUniswapFork(address,bytes32,uint256,uint256,address[])
+          handler: handleSwapOnUniswapFork
+        - function: buyOnUniswap(uint256,uint256,address[])
+          handler: handleBuyOnUniswap
+        - function: buyOnUniswapFork(address,bytes32,uint256,uint256,address[])
+          handler: handleBuyOnUniswapFork
+        - function: swapOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
+          handler: handleSwapOnUniswapV2Fork
+        - function: buyOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
+          handler: handleBuyOnUniswapV2Fork
+        # - function: swapOnZeroXv2(address,address,uint256,uint256,address,bytes)
+        #   handler: handleSwapOnZeroXv2
+        # - function: swapOnZeroXv4(address,address,uint256,uint256,address,bytes)
+        #   handler: handleSwapOnZeroXv4
+      file: ./src/mappingV5.ts
