@@ -166,7 +166,7 @@ export function handleSwapOnZeroXv2(call: SwapOnZeroXv2Call): void {
     let destToken = call.inputs.toToken;
     let swap = new Swap(
         crypto.keccak256(ByteArray.fromUTF8(
-            'swapOnUniswapFork-'
+            'swapOnZeroXv2-'
             + call.transaction.hash.toHex() + '-'
             + srcToken.toHex() + '-'
             + destToken.toHex() + '-'
@@ -204,7 +204,7 @@ export function handleSwapOnZeroXv4(call: SwapOnZeroXv4Call): void {
     let destToken = call.inputs.toToken;
     let swap = new Swap(
         crypto.keccak256(ByteArray.fromUTF8(
-            'swapOnUniswapFork-'
+            'swapOnZeroXv4-'
             + call.transaction.hash.toHex() + '-'
             + srcToken.toHex() + '-'
             + destToken.toHex() + '-'
@@ -216,7 +216,7 @@ export function handleSwapOnZeroXv4(call: SwapOnZeroXv4Call): void {
     swap.augustus = call.to;
     swap.augustusVersion = '5.0.0';
     swap.side = 'Sell';
-    swap.method = 'swapOnZeroXv2';
+    swap.method = 'swapOnZeroXv4';
     swap.initiator = call.from;
     swap.beneficiary = call.from;
     swap.srcToken = srcToken;
