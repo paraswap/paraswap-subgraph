@@ -109,12 +109,12 @@ dataSources:
           handler: handleBuyOnUniswap
         - function: buyOnUniswapFork(address,bytes32,uint256,uint256,address[])
           handler: handleBuyOnUniswapFork
-        - function: swapOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
-          handler: handleSwapOnUniswapV2Fork
-        - function: buyOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
-          handler: handleBuyOnUniswapV2Fork
-        # - function: swapOnZeroXv2(address,address,uint256,uint256,address,bytes)
-        #   handler: handleSwapOnZeroXv2
-        # - function: swapOnZeroXv4(address,address,uint256,uint256,address,bytes)
-        #   handler: handleSwapOnZeroXv4
+        # - function: swapOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
+        #   handler: handleSwapOnUniswapV2Fork
+        # - function: buyOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
+        #   handler: handleBuyOnUniswapV2Fork
+        - function: swapOnZeroXv2(address,address,uint256,uint256,address,bytes)
+          handler: handleSwapOnZeroXv2
+        - function: swapOnZeroXv4(address,address,uint256,uint256,address,bytes)
+          handler: handleSwapOnZeroXv4
       file: ./src/mappingV5.ts
