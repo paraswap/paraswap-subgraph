@@ -1,11 +1,8 @@
-import { ByteArray, log, crypto } from "@graphprotocol/graph-ts";
 import {
     Bought,
     Swapped
 } from "../generated/AugustusSwapperV5/AugustusSwapperV5";
 import { Swap } from "../generated/schema";
-
-// TODO: fix destToken in swapOnUnswapV2Fork, buyOnUniswapV2Fork
 
 export function handleSwapped(event: Swapped): void {
     let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
