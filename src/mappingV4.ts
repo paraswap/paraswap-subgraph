@@ -2,12 +2,13 @@ import { ByteArray, log, crypto } from "@graphprotocol/graph-ts";
 import {
   Bought,
   Swapped,
+  FeeTaken,
   SwapOnUniswapCall,
   SwapOnUniswapForkCall,
   BuyOnUniswapCall,
   BuyOnUniswapForkCall
 } from "../generated/AugustusSwapperV4/AugustusSwapperV4";
-import { Swap } from "../generated/schema";
+import { Swap, Fee } from "../generated/schema";
 
 export function handleSwapped(event: Swapped): void {
   let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
@@ -57,6 +58,21 @@ export function handleBought(event: Bought): void {
   swap.blockNumber = event.block.number;
   swap.timestamp = event.block.timestamp;
   swap.save();
+}
+
+export function handleFeeTaken(event: FeeTaken): void {
+  let fee = new Fee(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  fee.augustus = event.address
+  fee.augustusVersion = '4.0.0'
+  fee.fee = event.params.fee
+  fee.partnerShare = event.params.partnerShare
+  fee.paraswapShare = event.params.paraswapShare
+  fee.txHash = event.transaction.hash
+  fee.blockNumber = event.block.number;
+  fee.timestamp = event.block.timestamp;
+  fee.save()
 }
 
 export function handleSwapOnUniswap(call: SwapOnUniswapCall): void {
