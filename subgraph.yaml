@@ -25,4 +25,6 @@ dataSources:
           handler: handleSwapped
         - event: Bought(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleBought
+        - event: FeeTaken(uint256,uint256,uint256)
+          handler: handleFeeTaken
       file: ./src/mappingV5.ts
