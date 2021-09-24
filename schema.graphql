@@ -27,3 +27,15 @@ type Swap @entity {
   blockNumber: BigInt!
   timestamp: BigInt!
 }
+
+type Fee @entity {
+  id: ID!
+  augustus: Bytes!
+  augustusVersion: String!
+  fee: BigInt! # uint256
+  partnerShare: BigInt! # uint256
+  paraswapShare: BigInt! # uint256
+  txHash: Bytes!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}
