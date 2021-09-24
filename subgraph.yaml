@@ -25,6 +25,8 @@ dataSources:
           handler: handleBought
         - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
           handler: handleSwapped
+        - event: FeeTaken(uint256,uint256,uint256)
+          handler: handleFeeTaken
       file: ./src/mappingV2.ts
   - kind: ethereum/contract
     name: AugustusSwapperV3
@@ -47,6 +49,8 @@ dataSources:
           handler: handleBought
         - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
           handler: handleSwapped
+        - event: FeeTaken(uint256,uint256,uint256)
+          handler: handleFeeTaken
       file: ./src/mappingV3.ts
   - kind: ethereum/contract
     name: AugustusSwapperV4
@@ -69,6 +73,8 @@ dataSources:
           handler: handleBought
         - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
           handler: handleSwapped
+        - event: FeeTaken(uint256,uint256,uint256)
+          handler: handleFeeTaken
       callHandlers:
         - function: swapOnUniswap(uint256,uint256,address[],uint8)
           handler: handleSwapOnUniswap
@@ -100,6 +106,8 @@ dataSources:
           handler: handleSwapped
         - event: Bought(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleBought
+        - event: FeeTaken(uint256,uint256,uint256)
+          handler: handleFeeTaken
       callHandlers:
         - function: swapOnUniswap(uint256,uint256,address[])
           handler: handleSwapOnUniswap
