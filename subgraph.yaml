@@ -5,6 +5,94 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
+    name: AugustusSwapperV0_1_0
+    network: mainnet
+    source:
+      address: "0x6b158039b9678b7452f311deb12dd08c579dad26"
+      abi: AugustusSwapperV0_1_0
+      startBlock: 8650194
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+      abis:
+        - name: AugustusSwapperV0_1_0
+          file: ./abis/AugustusSwapperV0_1_0.json
+      eventHandlers:
+        - event: Payed(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handlePayed
+        - event: Swapped(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleSwapped
+      file: ./src/mappingV0_1_0.ts
+  - kind: ethereum/contract
+    name: AugustusSwapperV0_2_0
+    network: mainnet
+    source:
+      address: "0x72338b82800400f5488eca2b5a37270ba3b7a111"
+      abi: AugustusSwapperV0_2_0
+      startBlock: 8920121
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+      abis:
+        - name: AugustusSwapperV0_2_0
+          file: ./abis/AugustusSwapperV0_2_0.json
+      eventHandlers:
+        - event: Payed(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handlePayed
+        - event: Swapped(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleSwapped
+      file: ./src/mappingV0_2_0.ts
+  - kind: ethereum/contract
+    name: AugustusSwapperV0_3_0
+    network: mainnet
+    source:
+      address: "0xf92c1ad75005e6436b4ee84e88cb23ed8a290988"
+      abi: AugustusSwapperV0_3_0
+      startBlock: 9116915
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+      abis:
+        - name: AugustusSwapperV0_3_0
+          file: ./abis/AugustusSwapperV0_3_0.json
+      eventHandlers:
+        - event: Payed(indexed address,indexed address,indexed address,uint256,uint256,string)
+          handler: handlePayed
+        - event: Swapped(indexed address,indexed address,indexed address,uint256,uint256,string)
+          handler: handleSwapped
+      file: ./src/mappingV0_3_0.ts
+  - kind: ethereum/contract
+    name: AugustusSwapperV1
+    network: mainnet
+    source:
+      address: "0x86969d29f5fd327e1009ba66072be22db6017cc6"
+      abi: AugustusSwapperV1
+      startBlock: 10161180
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+      abis:
+        - name: AugustusSwapperV1
+          file: ./abis/AugustusSwapperV1.json
+      eventHandlers:
+        - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
+          handler: handleSwapped
+        - event: FeeTaken(uint256,uint256,uint256)
+          handler: handleFeeTaken
+      file: ./src/mappingV1.ts
+  - kind: ethereum/contract
     name: AugustusSwapperV2
     network: mainnet
     source:

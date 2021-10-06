@@ -10,7 +10,7 @@ type Swap @entity {
   augustusVersion: String!
   side: Side!
   method: String!
-  initiator: Bytes! # address
+  initiator: Bytes # address
   beneficiary: Bytes! # address
   srcToken: Bytes! # address
   destToken: Bytes! # address
