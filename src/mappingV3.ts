@@ -1,3 +1,4 @@
+import { crypto, ByteArray } from "@graphprotocol/graph-ts";
 import {
   Bought,
   Swapped,
@@ -5,7 +6,6 @@ import {
   TransferTokensCall,
 } from "../generated/AugustusSwapperV3/AugustusSwapperV3";
 import { Swap, Fee, TokenTransfer } from "../generated/schema";
-import { crypto, ByteArray } from "@graphprotocol/graph-ts";
 
 export function handleSwapped(event: Swapped): void {
   let swap = new Swap(
