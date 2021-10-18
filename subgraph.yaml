@@ -17,6 +17,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - Fee
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV4
           file: ./abis/AugustusSwapperV4.json
@@ -27,6 +29,9 @@ dataSources:
           handler: handleSwapped
         - event: FeeTaken(uint256,uint256,uint256)
           handler: handleFeeTaken
+      callHandlers:
+        - function: transferTokens(address,address,uint256)
+          handler: handleTransferTokens
       file: ./src/mappingV4.ts
   - kind: ethereum/contract
     name: AugustusSwapperV5
@@ -41,6 +46,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - Fee
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV5
           file: ./abis/AugustusSwapperV5.json
@@ -51,4 +58,7 @@ dataSources:
           handler: handleBought
         - event: FeeTaken(uint256,uint256,uint256)
           handler: handleFeeTaken
+      callHandlers:
+        - function: transferTokens(address,address,uint256)
+          handler: handleTransferTokens
       file: ./src/mappingV5.ts
