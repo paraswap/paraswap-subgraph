@@ -17,6 +17,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV0_1_0
           file: ./abis/AugustusSwapperV0_1_0.json
@@ -42,6 +43,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV0_2_0
           file: ./abis/AugustusSwapperV0_2_0.json
@@ -67,6 +69,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV0_3_0
           file: ./abis/AugustusSwapperV0_3_0.json
@@ -92,6 +95,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - Fee
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV1
           file: ./abis/AugustusSwapperV1.json
@@ -117,6 +122,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - Fee
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV2
           file: ./abis/AugustusSwapperV2.json
@@ -144,6 +151,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - Fee
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV3
           file: ./abis/AugustusSwapperV3.json
@@ -171,6 +180,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - Fee
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV4
           file: ./abis/AugustusSwapperV4.json
@@ -206,6 +217,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - Fee
+        - TokenTransfer
       abis:
         - name: AugustusSwapperV5
           file: ./abis/AugustusSwapperV5.json
