@@ -39,3 +39,14 @@ type Fee @entity {
   blockNumber: BigInt!
   timestamp: BigInt!
 }
+
+type TokenTransfer @entity {
+  id: ID!
+  augustusVersion: String!
+  token: Bytes!
+  tokenAmount: BigInt!
+  toAddress: Bytes!
+  txHash: Bytes!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}
