@@ -3,7 +3,7 @@
 > To read more about Paraswap, visit the official documentaion page [here](https://doc.paraswap.network/).
 
 ### About the Subgraph
-This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Avalanche** (mainnet) chain. This subgraph supports the latest v5 release.
+This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Fantom** (fantom) chain. This subgraph supports the latest v5 release.
 
 >You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/legacy-explorer/subgraph/paraswap/paraswap-subgraph)
 
