@@ -3,9 +3,9 @@
 > To read more about Paraswap, visit the official documentaion page [here](https://doc.paraswap.network/).
 
 ### About the Subgraph
-This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Ethereum** (mainnet) chain. This subgraph supports Paraswap v2 to the latest v5 release.
+This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Ethereum** (mainnet) chain. This subgraph supports Paraswap v0.1.0 to the latest v5 release.
 
->You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/legacy-explorer/subgraph/paraswap/paraswap-subgraph)
+> You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/hosted-service/subgraph/paraswap/paraswap-subgraph).
 
 ### Instructions to run locally
 #### Setup Graph Node
