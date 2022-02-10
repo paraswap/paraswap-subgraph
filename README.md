@@ -5,7 +5,7 @@
 ### About the Subgraph
 This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Fantom** (fantom) chain. This subgraph supports the latest v5 release.
 
->You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/legacy-explorer/subgraph/paraswap/paraswap-subgraph)
+> You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/hosted-service/subgraph/paraswap/paraswap-subgraph-fantom).
 
 ### Instructions to run locally
 #### Setup Graph Node
