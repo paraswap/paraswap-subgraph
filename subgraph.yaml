@@ -189,13 +189,17 @@ dataSources:
       abis:
         - name: AugustusSwapperV5
           file: ./abis/AugustusSwapperV5.json
+        - name: UniswapV2Pair
+          file: ./abis/UniswapV2Pair.json
       eventHandlers:
         - event: Swapped(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleSwapped
         - event: Bought(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleBought
-        - event: FeeTaken(uint256,uint256,uint256)
-          handler: handleFeeTaken
+        - event: Swapped2(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleSwapped2
+        - event: Bought2(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleBought2
       callHandlers:
         - function: swapOnUniswap(uint256,uint256,address[])
           handler: handleSwapOnUniswap
@@ -205,12 +209,20 @@ dataSources:
           handler: handleBuyOnUniswap
         - function: buyOnUniswapFork(address,bytes32,uint256,uint256,address[])
           handler: handleBuyOnUniswapFork
-        # - function: swapOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
-        #   handler: handleSwapOnUniswapV2Fork
-        # - function: buyOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
-        #   handler: handleBuyOnUniswapV2Fork
+        - function: swapOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
+          handler: handleSwapOnUniswapV2Fork
+        - function: swapOnUniswapV2ForkWithPermit(address,uint256,uint256,address,uint256[],bytes)
+          handler: handleSwapOnUniswapV2ForkWithPermit
+        - function: buyOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
+          handler: handleBuyOnUniswapV2Fork
+        - function: buyOnUniswapV2ForkWithPermit(address,uint256,uint256,address,uint256[],bytes)
+          handler: handleBuyOnUniswapV2ForkWithPermit
         - function: swapOnZeroXv2(address,address,uint256,uint256,address,bytes)
           handler: handleSwapOnZeroXv2
+        - function: swapOnZeroXv2WithPermit(address,address,uint256,uint256,address,bytes,bytes)
+          handler: handleSwapOnZeroXv2WithPermit
         - function: swapOnZeroXv4(address,address,uint256,uint256,address,bytes)
           handler: handleSwapOnZeroXv4
+        - function: swapOnZeroXv4WithPermit(address,address,uint256,uint256,address,bytes,bytes)
+          handler: handleSwapOnZeroXv4WithPermit
       file: ./src/mappingV5.ts
