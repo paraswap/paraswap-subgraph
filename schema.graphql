@@ -18,6 +18,7 @@ type Swap @entity {
   destAmount: BigInt!
   expectedAmount: BigInt
   referrer: String
+  feeCode: BigInt
   txHash: Bytes!
   txOrigin: Bytes! # address
   txTarget: Bytes # address
