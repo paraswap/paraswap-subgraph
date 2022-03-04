@@ -469,8 +469,8 @@ export function handleSwapOnUniswapV2Fork(call: SwapOnUniswapV2ForkCall): void {
     let weth = call.inputs.weth;
     let destToken: Address;
     if (
-      srcToken.toHex() !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
-      weth.toHex() !== '0x0000000000000000000000000000000000000000'
+      srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+      weth.toHex() != '0x0000000000000000000000000000000000000000'
     ) {
       destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     } else {
@@ -556,8 +556,8 @@ export function handleSwapOnUniswapV2ForkWithPermit(call: SwapOnUniswapV2ForkWit
     let weth = call.inputs.weth;
     let destToken: Address;
     if (
-      srcToken.toHex() !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
-      weth.toHex() !== '0x0000000000000000000000000000000000000000'
+      srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+      weth.toHex() != '0x0000000000000000000000000000000000000000'
     ) {
       destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     } else {
@@ -643,8 +643,8 @@ export function handleBuyOnUniswapV2Fork(call: BuyOnUniswapV2ForkCall): void {
     let weth = call.inputs.weth;
     let destToken: Address;
     if (
-      srcToken.toHex() !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
-      weth.toHex() !== '0x0000000000000000000000000000000000000000'
+      srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+      weth.toHex() != '0x0000000000000000000000000000000000000000'
     ) {
       destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     } else {
@@ -730,8 +730,8 @@ export function handleBuyOnUniswapV2ForkWithPermit(call: BuyOnUniswapV2ForkWithP
     let weth = call.inputs.weth;
     let destToken: Address;
     if (
-      srcToken.toHex() !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
-      weth.toHex() !== '0x0000000000000000000000000000000000000000'
+      srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+      weth.toHex() != '0x0000000000000000000000000000000000000000'
     ) {
       destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     } else {
