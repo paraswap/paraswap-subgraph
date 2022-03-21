@@ -3,9 +3,9 @@
 > To read more about Paraswap, visit the official documentaion page [here](https://doc.paraswap.network/).
 
 ### About the Subgraph
-This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Polygon** (matic) chain. This subgraph supports Paraswap v4 and the latest v5 release.
+This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Polygon** (matic) chain on the test contracts for referral program **only**.
 
-> You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/hosted-service/subgraph/paraswap/paraswap-subgraph-polygon).
+> You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/hosted-service/subgraph/paraswap/polygon-referrals).
 
 ### Instructions to run locally
 #### Setup Graph Node
