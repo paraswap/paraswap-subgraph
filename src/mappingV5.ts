@@ -469,53 +469,53 @@ export function handleSwapOnUniswapV2Fork(call: SwapOnUniswapV2ForkCall): void {
     let weth = call.inputs.weth;
     let destToken: Address;
     if (
-      srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
-      weth.toHex() != '0x0000000000000000000000000000000000000000'
+        srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        weth.toHex() != '0x0000000000000000000000000000000000000000'
     ) {
-      destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+        destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     } else {
-      let pools = call.inputs.pools;
-      let poolsLength = pools.length;
-      if (poolsLength < 1) {
-          log.error('Invalid pools length on swapOnUniswapV2Fork tx {}', [
-              call.transaction.hash.toHex()
-          ]);
-          return;
-      }
-      let lastPool = pools[poolsLength - 1];
-      let lastPoolHex = lastPool.toHex();
-      let lastPoolHexLength = lastPoolHex.length;
-      if (lastPoolHexLength < 42) {
-          log.error('Invalid last pool hex {} for swapOnUniswapV2Fork tx {}', [
-              lastPoolHex,
-              call.transaction.hash.toHex()
-          ]);
-          return;
-      }
-      let lastPoolAddress = '0x' + lastPoolHex.slice(lastPoolHexLength - 40);
-      let lastPool0To1 = lastPool.rightShift(160).bitAnd(BigInt.fromI32(1)).isZero();
-      let lastPairContract = UniswapV2Pair.bind(Address.fromString(lastPoolAddress));
-      if (lastPool0To1) {
-          let result = lastPairContract.try_token1();
-          if (result.reverted) {
-              log.error('Failed to get token1 for pool {} in swapOnUniswapV2Fork tx {}', [
-                  lastPoolAddress,
-                  call.transaction.hash.toHex()
-              ]);
-              return;
-          }
-          destToken = result.value;
-      } else {
-          let result = lastPairContract.try_token0();
-          if (result.reverted) {
-              log.error('Failed to get token0 for pool {} in swapOnUniswapV2Fork tx {}', [
-                  lastPoolAddress,
-                  call.transaction.hash.toHex()
-              ]);
-              return;
-          }
-          destToken = result.value;
-      }
+        let pools = call.inputs.pools;
+        let poolsLength = pools.length;
+        if (poolsLength < 1) {
+            log.error('Invalid pools length on swapOnUniswapV2Fork tx {}', [
+                call.transaction.hash.toHex()
+            ]);
+            return;
+        }
+        let lastPool = pools[poolsLength - 1];
+        let lastPoolHex = lastPool.toHex();
+        let lastPoolHexLength = lastPoolHex.length;
+        if (lastPoolHexLength < 42) {
+            log.error('Invalid last pool hex {} for swapOnUniswapV2Fork tx {}', [
+                lastPoolHex,
+                call.transaction.hash.toHex()
+            ]);
+            return;
+        }
+        let lastPoolAddress = '0x' + lastPoolHex.slice(lastPoolHexLength - 40);
+        let lastPool0To1 = lastPool.rightShift(160).bitAnd(BigInt.fromI32(1)).isZero();
+        let lastPairContract = UniswapV2Pair.bind(Address.fromString(lastPoolAddress));
+        if (lastPool0To1) {
+            let result = lastPairContract.try_token1();
+            if (result.reverted) {
+                log.error('Failed to get token1 for pool {} in swapOnUniswapV2Fork tx {}', [
+                    lastPoolAddress,
+                    call.transaction.hash.toHex()
+                ]);
+                return;
+            }
+            destToken = result.value;
+        } else {
+            let result = lastPairContract.try_token0();
+            if (result.reverted) {
+                log.error('Failed to get token0 for pool {} in swapOnUniswapV2Fork tx {}', [
+                    lastPoolAddress,
+                    call.transaction.hash.toHex()
+                ]);
+                return;
+            }
+            destToken = result.value;
+        }
     }
     let swap = new Swap(
         crypto.keccak256(ByteArray.fromUTF8(
@@ -556,53 +556,53 @@ export function handleSwapOnUniswapV2ForkWithPermit(call: SwapOnUniswapV2ForkWit
     let weth = call.inputs.weth;
     let destToken: Address;
     if (
-      srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
-      weth.toHex() != '0x0000000000000000000000000000000000000000'
+        srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        weth.toHex() != '0x0000000000000000000000000000000000000000'
     ) {
-      destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+        destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     } else {
-      let pools = call.inputs.pools;
-      let poolsLength = pools.length;
-      if (poolsLength < 1) {
-          log.error('Invalid pools length on swapOnUniswapV2ForkWithPermit tx {}', [
-              call.transaction.hash.toHex()
-          ]);
-          return;
-      }
-      let lastPool = pools[poolsLength - 1];
-      let lastPoolHex = lastPool.toHex();
-      let lastPoolHexLength = lastPoolHex.length;
-      if (lastPoolHexLength < 42) {
-          log.error('Invalid last pool hex {} for swapOnUniswapV2ForkWithPermit tx {}', [
-              lastPoolHex,
-              call.transaction.hash.toHex()
-          ]);
-          return;
-      }
-      let lastPoolAddress = '0x' + lastPoolHex.slice(lastPoolHexLength - 40);
-      let lastPool0To1 = lastPool.rightShift(160).bitAnd(BigInt.fromI32(1)).isZero();
-      let lastPairContract = UniswapV2Pair.bind(Address.fromString(lastPoolAddress));
-      if (lastPool0To1) {
-          let result = lastPairContract.try_token1();
-          if (result.reverted) {
-              log.error('Failed to get token1 for pool {} in swapOnUniswapV2ForkWithPermit tx {}', [
-                  lastPoolAddress,
-                  call.transaction.hash.toHex()
-              ]);
-              return;
-          }
-          destToken = result.value;
-      } else {
-          let result = lastPairContract.try_token0();
-          if (result.reverted) {
-              log.error('Failed to get token0 for pool {} in swapOnUniswapV2ForkWithPermit tx {}', [
-                  lastPoolAddress,
-                  call.transaction.hash.toHex()
-              ]);
-              return;
-          }
-          destToken = result.value;
-      }
+        let pools = call.inputs.pools;
+        let poolsLength = pools.length;
+        if (poolsLength < 1) {
+            log.error('Invalid pools length on swapOnUniswapV2ForkWithPermit tx {}', [
+                call.transaction.hash.toHex()
+            ]);
+            return;
+        }
+        let lastPool = pools[poolsLength - 1];
+        let lastPoolHex = lastPool.toHex();
+        let lastPoolHexLength = lastPoolHex.length;
+        if (lastPoolHexLength < 42) {
+            log.error('Invalid last pool hex {} for swapOnUniswapV2ForkWithPermit tx {}', [
+                lastPoolHex,
+                call.transaction.hash.toHex()
+            ]);
+            return;
+        }
+        let lastPoolAddress = '0x' + lastPoolHex.slice(lastPoolHexLength - 40);
+        let lastPool0To1 = lastPool.rightShift(160).bitAnd(BigInt.fromI32(1)).isZero();
+        let lastPairContract = UniswapV2Pair.bind(Address.fromString(lastPoolAddress));
+        if (lastPool0To1) {
+            let result = lastPairContract.try_token1();
+            if (result.reverted) {
+                log.error('Failed to get token1 for pool {} in swapOnUniswapV2ForkWithPermit tx {}', [
+                    lastPoolAddress,
+                    call.transaction.hash.toHex()
+                ]);
+                return;
+            }
+            destToken = result.value;
+        } else {
+            let result = lastPairContract.try_token0();
+            if (result.reverted) {
+                log.error('Failed to get token0 for pool {} in swapOnUniswapV2ForkWithPermit tx {}', [
+                    lastPoolAddress,
+                    call.transaction.hash.toHex()
+                ]);
+                return;
+            }
+            destToken = result.value;
+        }
     }
     let swap = new Swap(
         crypto.keccak256(ByteArray.fromUTF8(
@@ -643,53 +643,53 @@ export function handleBuyOnUniswapV2Fork(call: BuyOnUniswapV2ForkCall): void {
     let weth = call.inputs.weth;
     let destToken: Address;
     if (
-      srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
-      weth.toHex() != '0x0000000000000000000000000000000000000000'
+        srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        weth.toHex() != '0x0000000000000000000000000000000000000000'
     ) {
-      destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+        destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     } else {
-      let pools = call.inputs.pools;
-      let poolsLength = pools.length;
-      if (poolsLength < 1) {
-          log.error('Invalid pools length on buyOnUniswapV2Fork tx {}', [
-              call.transaction.hash.toHex()
-          ]);
-          return;
-      }
-      let lastPool = pools[poolsLength - 1];
-      let lastPoolHex = lastPool.toHex();
-      let lastPoolHexLength = lastPoolHex.length;
-      if (lastPoolHexLength < 42) {
-          log.error('Invalid last pool hex {} for buyOnUniswapV2Fork tx {}', [
-              lastPoolHex,
-              call.transaction.hash.toHex()
-          ]);
-          return;
-      }
-      let lastPoolAddress = '0x' + lastPoolHex.slice(lastPoolHexLength - 40);
-      let lastPool0To1 = lastPool.rightShift(160).bitAnd(BigInt.fromI32(1)).isZero();
-      let lastPairContract = UniswapV2Pair.bind(Address.fromString(lastPoolAddress));
-      if (lastPool0To1) {
-          let result = lastPairContract.try_token1();
-          if (result.reverted) {
-              log.error('Failed to get token1 for pool {} in buyOnUniswapV2Fork tx {}', [
-                  lastPoolAddress,
-                  call.transaction.hash.toHex()
-              ]);
-              return;
-          }
-          destToken = result.value;
-      } else {
-          let result = lastPairContract.try_token0();
-          if (result.reverted) {
-              log.error('Failed to get token0 for pool {} in buyOnUniswapV2Fork tx {}', [
-                  lastPoolAddress,
-                  call.transaction.hash.toHex()
-              ]);
-              return;
-          }
-          destToken = result.value;
-      }
+        let pools = call.inputs.pools;
+        let poolsLength = pools.length;
+        if (poolsLength < 1) {
+            log.error('Invalid pools length on buyOnUniswapV2Fork tx {}', [
+                call.transaction.hash.toHex()
+            ]);
+            return;
+        }
+        let lastPool = pools[poolsLength - 1];
+        let lastPoolHex = lastPool.toHex();
+        let lastPoolHexLength = lastPoolHex.length;
+        if (lastPoolHexLength < 42) {
+            log.error('Invalid last pool hex {} for buyOnUniswapV2Fork tx {}', [
+                lastPoolHex,
+                call.transaction.hash.toHex()
+            ]);
+            return;
+        }
+        let lastPoolAddress = '0x' + lastPoolHex.slice(lastPoolHexLength - 40);
+        let lastPool0To1 = lastPool.rightShift(160).bitAnd(BigInt.fromI32(1)).isZero();
+        let lastPairContract = UniswapV2Pair.bind(Address.fromString(lastPoolAddress));
+        if (lastPool0To1) {
+            let result = lastPairContract.try_token1();
+            if (result.reverted) {
+                log.error('Failed to get token1 for pool {} in buyOnUniswapV2Fork tx {}', [
+                    lastPoolAddress,
+                    call.transaction.hash.toHex()
+                ]);
+                return;
+            }
+            destToken = result.value;
+        } else {
+            let result = lastPairContract.try_token0();
+            if (result.reverted) {
+                log.error('Failed to get token0 for pool {} in buyOnUniswapV2Fork tx {}', [
+                    lastPoolAddress,
+                    call.transaction.hash.toHex()
+                ]);
+                return;
+            }
+            destToken = result.value;
+        }
     }
     let swap = new Swap(
         crypto.keccak256(ByteArray.fromUTF8(
@@ -730,53 +730,53 @@ export function handleBuyOnUniswapV2ForkWithPermit(call: BuyOnUniswapV2ForkWithP
     let weth = call.inputs.weth;
     let destToken: Address;
     if (
-      srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
-      weth.toHex() != '0x0000000000000000000000000000000000000000'
+        srcToken.toHex() != '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        weth.toHex() != '0x0000000000000000000000000000000000000000'
     ) {
-      destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+        destToken = Address.fromString('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     } else {
-      let pools = call.inputs.pools;
-      let poolsLength = pools.length;
-      if (poolsLength < 1) {
-          log.error('Invalid pools length on buyOnUniswapV2ForkWithPermit tx {}', [
-              call.transaction.hash.toHex()
-          ]);
-          return;
-      }
-      let lastPool = pools[poolsLength - 1];
-      let lastPoolHex = lastPool.toHex();
-      let lastPoolHexLength = lastPoolHex.length;
-      if (lastPoolHexLength < 42) {
-          log.error('Invalid last pool hex {} for buyOnUniswapV2ForkWithPermit tx {}', [
-              lastPoolHex,
-              call.transaction.hash.toHex()
-          ]);
-          return;
-      }
-      let lastPoolAddress = '0x' + lastPoolHex.slice(lastPoolHexLength - 40);
-      let lastPool0To1 = lastPool.rightShift(160).bitAnd(BigInt.fromI32(1)).isZero();
-      let lastPairContract = UniswapV2Pair.bind(Address.fromString(lastPoolAddress));
-      if (lastPool0To1) {
-          let result = lastPairContract.try_token1();
-          if (result.reverted) {
-              log.error('Failed to get token1 for pool {} in buyOnUniswapV2ForkWithPermit tx {}', [
-                  lastPoolAddress,
-                  call.transaction.hash.toHex()
-              ]);
-              return;
-          }
-          destToken = result.value;
-      } else {
-          let result = lastPairContract.try_token0();
-          if (result.reverted) {
-              log.error('Failed to get token0 for pool {} in buyOnUniswapV2ForkWithPermit tx {}', [
-                  lastPoolAddress,
-                  call.transaction.hash.toHex()
-              ]);
-              return;
-          }
-          destToken = result.value;
-      }
+        let pools = call.inputs.pools;
+        let poolsLength = pools.length;
+        if (poolsLength < 1) {
+            log.error('Invalid pools length on buyOnUniswapV2ForkWithPermit tx {}', [
+                call.transaction.hash.toHex()
+            ]);
+            return;
+        }
+        let lastPool = pools[poolsLength - 1];
+        let lastPoolHex = lastPool.toHex();
+        let lastPoolHexLength = lastPoolHex.length;
+        if (lastPoolHexLength < 42) {
+            log.error('Invalid last pool hex {} for buyOnUniswapV2ForkWithPermit tx {}', [
+                lastPoolHex,
+                call.transaction.hash.toHex()
+            ]);
+            return;
+        }
+        let lastPoolAddress = '0x' + lastPoolHex.slice(lastPoolHexLength - 40);
+        let lastPool0To1 = lastPool.rightShift(160).bitAnd(BigInt.fromI32(1)).isZero();
+        let lastPairContract = UniswapV2Pair.bind(Address.fromString(lastPoolAddress));
+        if (lastPool0To1) {
+            let result = lastPairContract.try_token1();
+            if (result.reverted) {
+                log.error('Failed to get token1 for pool {} in buyOnUniswapV2ForkWithPermit tx {}', [
+                    lastPoolAddress,
+                    call.transaction.hash.toHex()
+                ]);
+                return;
+            }
+            destToken = result.value;
+        } else {
+            let result = lastPairContract.try_token0();
+            if (result.reverted) {
+                log.error('Failed to get token0 for pool {} in buyOnUniswapV2ForkWithPermit tx {}', [
+                    lastPoolAddress,
+                    call.transaction.hash.toHex()
+                ]);
+                return;
+            }
+            destToken = result.value;
+        }
     }
     let swap = new Swap(
         crypto.keccak256(ByteArray.fromUTF8(
