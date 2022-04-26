@@ -44,3 +44,19 @@ type Fee @entity {
   blockNumber: BigInt!
   timestamp: BigInt!
 }
+
+type ReferrerFee @entity {
+  # referrerAddress  + "-" + TokenAddress 
+  id: ID!
+  referrerAddress: Bytes!
+  tokenAddress: Bytes!
+  totalRewards: BigInt!
+}
+
+type PartnerFee @entity {
+  # partnerAddress  + "-" + TokenAddress 
+  id: ID!
+  partnerAddress: Bytes!
+  tokenAddress: Bytes!
+  totalRewards: BigInt!
+}
