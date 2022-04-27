@@ -1,5 +1,4 @@
-import { Address, BigInt, Bytes, ByteArray, log, crypto } from "@graphprotocol/graph-ts";
-import { lowerCase } from "lodash";
+import { BigInt, Bytes } from "@graphprotocol/graph-ts";
 
 const partnerSharePercent = BigInt.fromI32(8500);
 const nullAddress = "0x0000000000000000000000000000000000000000";
@@ -16,8 +15,9 @@ export function calcFeeShare(
     let paraswapShare: BigInt;
     let partnerShare: BigInt;
 
+    // Src Token
     if (_isTakeFeeFromSrcToken(feeCode)) {
-        if (lowerCase(swapType) == "sell") {
+        if (swapType == "sell") {
             [partnerShare, paraswapShare] = calcFromTokenFee(fromAmount, partner, feeCode);
         }
         // Buy
@@ -25,13 +25,14 @@ export function calcFeeShare(
             [partnerShare, paraswapShare] = calcFromTokenFeeWithSlippage(fromAmount, expectedAmount, partner, feeCode);
         }
     }
+    // Dest Token
     else {
-        if (lowerCase(swapType) == "sell") {
-            [partnerShare, paraswapShare] = calcToTokenFee(receivedAmount, partner, feeCode);
+        if (swapType == "sell") {
+            [partnerShare, paraswapShare] = calcToTokenFeeWithSlippage(receivedAmount, expectedAmount, partner, feeCode);
         }
         // Buy
         else {
-            [partnerShare, paraswapShare] = calcToTokenFeeWithSlippage(receivedAmount, expectedAmount, partner, feeCode);
+            [partnerShare, paraswapShare] = calcToTokenFee(receivedAmount, partner, feeCode);
         }
     }
     return [partnerShare, paraswapShare];
@@ -48,7 +49,7 @@ function calcFromTokenFee(
     let paraswapShare: BigInt;
 
     let fixedFeeBps = _getFixedFeeBps(partner, feeCode);
-    if (fixedFeeBps != BigInt.fromI32(0)) {
+    if (fixedFeeBps.notEqual(BigInt.fromI32(0))) {
         [partnerShare, paraswapShare] = _calcFixedFees(fromAmount, fixedFeeBps);
     }
     return [partnerShare, paraswapShare];
@@ -67,11 +68,11 @@ function calcFromTokenFeeWithSlippage(
     let fixedFeeBps = _getFixedFeeBps(partner, feeCode);
     let slippage = _calcSlippage(fixedFeeBps, expectedAmount, fromAmount)
 
-    if (fixedFeeBps != BigInt.fromI32(0)) {
+    if (fixedFeeBps.notEqual(BigInt.fromI32(0))) {
         [partnerShare, paraswapShare] = _calcFixedFees(expectedAmount, fixedFeeBps);
     }
 
-    if (slippage != BigInt.fromI32(0)) {
+    if (slippage.notEqual(BigInt.fromI32(0))) {
         let [partnerSlippageShare, paraswapSlippageShare] = _calcSlippageFees(slippage, partner, feeCode)
         partnerShare = partnerShare.plus(partnerSlippageShare);
         paraswapShare = paraswapShare.plus(paraswapSlippageShare);
@@ -90,7 +91,7 @@ function calcToTokenFee(
     let paraswapShare: BigInt;
 
     let fixedFeeBps = _getFixedFeeBps(partner, feeCode);
-    if (fixedFeeBps != BigInt.fromI32(0)) {
+    if (fixedFeeBps.notEqual(BigInt.fromI32(0))) {
         [partnerShare, paraswapShare] = _calcFixedFees(receivedAmount, fixedFeeBps);
     }
     return [partnerShare, paraswapShare];
@@ -110,13 +111,13 @@ function calcToTokenFeeWithSlippage(
     let fixedFeeBps = _getFixedFeeBps(partner, feeCode);
     let slippage = _calcSlippage(fixedFeeBps, receivedAmount, expectedAmount);
 
-    if (fixedFeeBps != BigInt.fromI32(0)) {
+    if (fixedFeeBps.notEqual(BigInt.fromI32(0))) {
         [partnerShare, paraswapShare] = _calcFixedFees(
-            slippage != BigInt.fromI32(0) ? expectedAmount : receivedAmount, fixedFeeBps
+            slippage.notEqual(BigInt.fromI32(0)) ? expectedAmount : receivedAmount, fixedFeeBps
         );
     }
 
-    if (slippage != BigInt.fromI32(0)) {
+    if (slippage.notEqual(BigInt.fromI32(0))) {
         let [partnerSlippageShare, paraswapSlippageShare] = _calcSlippageFees(slippage, partner, feeCode)
         partnerShare = partnerShare.plus(partnerSlippageShare);
         paraswapShare = paraswapShare.plus(paraswapSlippageShare);
@@ -134,7 +135,7 @@ function _getFixedFeeBps(partner: Bytes, feeCode: BigInt): BigInt {
         fixedFeeBps = feeCode;
     } else if (
         feeCode
-            .bitAnd(BigInt.fromI32(1).leftShift(BigInt.fromI32(16)))
+            .bitAnd(BigInt.fromI32(1 << 16))
             .notEqual(BigInt.fromI32(0))
     ) {
         // referrer program only has slippage fees
@@ -171,7 +172,7 @@ function _calcSlippageFees(
 
     if (partner.toHex() != nullAddress) {
         let version = feeCode.rightShift(248);
-        if (version != BigInt.fromI32(0)) {
+        if (version.notEqual(BigInt.fromI32(0))) {
             if ((feeCode.bitAnd(BigInt.fromI32(1 << 16))).notEqual(BigInt.fromI32(0))) {
                 let feeBps = feeCode.bitAnd(BigInt.fromI32(0x3FFF));
                 partnerShare = paraswapShare.times(feeBps > BigInt.fromI32(10000) ? BigInt.fromI32(10000) : feeBps).div(BigInt.fromI32(10000));
@@ -185,9 +186,9 @@ function _calcSlippageFees(
 }
 
 export function _isTakeFeeFromSrcToken(feeCode: BigInt): boolean {
-    return feeCode.rightShift(BigInt.fromI32(248)).notEqual(BigInt.fromI32(0)) && (feeCode.bitAnd(BigInt.fromI32(1 << 15))).notEqual(BigInt.fromI32(0));
+    return feeCode.rightShift(BigInt.fromI32(248)).notEqual(BigInt.fromI32(0)) && feeCode.bitAnd(BigInt.fromI32(1 << 15)).notEqual(BigInt.fromI32(0));
 }
 
 export function _isReferralProgram(feeCode: BigInt): boolean {
-    return feeCode.bitAnd(BigInt.fromI32(1 << 16)) != BigInt.fromI32(0);
+    return feeCode.rightShift(BigInt.fromI32(248)).notEqual(BigInt.fromI32(0)) && feeCode.bitAnd(BigInt.fromI32(1 << 16)).notEqual(BigInt.fromI32(0));
 }
