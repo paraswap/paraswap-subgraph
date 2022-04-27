@@ -186,6 +186,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - ReferrerFee
+        - PartnerFee
       abis:
         - name: AugustusSwapperV5
           file: ./abis/AugustusSwapperV5.json
