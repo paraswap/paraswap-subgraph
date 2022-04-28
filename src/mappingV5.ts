@@ -1,4 +1,4 @@
-import { Address, BigInt, ByteArray, log, crypto } from "@graphprotocol/graph-ts";
+import { Address, BigInt, TypedMap, ByteArray, log, crypto } from "@graphprotocol/graph-ts";
 import {
     Bought,
     Bought2,
@@ -77,14 +77,18 @@ export function handleSwapped2(event: Swapped2): void {
 }
 
 export function handleSwappedV3(event: SwappedV3): void {
-    let [partnerShare, paraswapShare] = calcFeeShare(
+    let feeShare = calcFeeShare(
         event.params.feePercent,
         event.params.partner,
         event.params.srcAmount,
         event.params.receivedAmount,
         event.params.expectedAmount,
         'sell'
-    )
+    );
+
+    let partnerShare = feeShare.get('partnerFee');
+    let paraswapShare = feeShare.get('paraswapFee');
+
     let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
     let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent) ? event.params.srcToken : event.params.destToken;
 
@@ -117,18 +121,19 @@ export function handleSwappedV3(event: SwappedV3): void {
     swap.timestamp = event.block.timestamp;
     swap.save();
 
-    if (swap.referrerFee > BigInt.fromI32(0)) {// ReferrerFee entity
+    if (partnerShare > BigInt.fromI32(0)) {
+        // ReferrerFee entity
         if (isReferralProgramBool) {
             let referrerFeeId = event.params.partner.toHex() + "-" + feeToken.toHex();
             let referrerFee = ReferrerFee.load(referrerFeeId);
-            if (referrerFee == null) {
+            if (!referrerFee) {
                 referrerFee = new ReferrerFee(referrerFeeId);
                 referrerFee.referrerAddress = event.params.partner;
                 referrerFee.tokenAddress = feeToken;
-                referrerFee.totalRewards = swap.referrerFee;
+                referrerFee.totalRewards = partnerShare;
             }
             else {
-                referrerFee.totalRewards = referrerFee.totalRewards.plus(swap.referrerFee);
+                referrerFee.totalRewards = referrerFee.totalRewards.plus(partnerShare);
             }
             referrerFee.save();
         }
@@ -137,14 +142,14 @@ export function handleSwappedV3(event: SwappedV3): void {
         else {
             let partnerFeeId = event.params.partner.toHex() + "-" + feeToken.toHex();
             let partnerFee = PartnerFee.load(partnerFeeId);
-            if (partnerFee == null) {
+            if (!partnerFee) {
                 partnerFee = new PartnerFee(partnerFeeId);
                 partnerFee.partnerAddress = event.params.partner;
                 partnerFee.tokenAddress = feeToken;
-                partnerFee.totalRewards = swap.referrerFee;
+                partnerFee.totalRewards = partnerShare;
             }
             else {
-                partnerFee.totalRewards = partnerFee.totalRewards.plus(swap.referrerFee);
+                partnerFee.totalRewards = partnerFee.totalRewards.plus(partnerShare);
             }
             partnerFee.save();
         }
@@ -205,14 +210,17 @@ export function handleBought2(event: Bought2): void {
 }
 
 export function handleBoughtV3(event: BoughtV3): void {
-    let [partnerShare, paraswapShare] = calcFeeShare(
+    let feeShare = calcFeeShare(
         event.params.feePercent,
         event.params.partner,
         event.params.srcAmount,
         event.params.receivedAmount,
         event.params.expectedAmount,
         'buy'
-    )
+    );
+
+    let partnerShare = feeShare.get('partnerFee');
+    let paraswapShare = feeShare.get('paraswapFee');
 
     let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
     let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent) ? event.params.srcToken : event.params.destToken;
@@ -246,19 +254,19 @@ export function handleBoughtV3(event: BoughtV3): void {
     swap.timestamp = event.block.timestamp;
     swap.save();
 
-    if (swap.referrerFee > BigInt.fromI32(0)) {
+    if (partnerShare > BigInt.fromI32(0)) {
         // ReferrerFee entity
         if (isReferralProgramBool) {
             let referrerFeeId = event.params.partner.toHex() + "-" + feeToken.toHex();
             let referrerFee = ReferrerFee.load(referrerFeeId);
-            if (referrerFee == null) {
+            if (!referrerFee) {
                 referrerFee = new ReferrerFee(referrerFeeId);
                 referrerFee.referrerAddress = event.params.partner;
                 referrerFee.tokenAddress = feeToken;
-                referrerFee.totalRewards = swap.referrerFee;
+                referrerFee.totalRewards = partnerShare;
             }
             else {
-                referrerFee.totalRewards = referrerFee.totalRewards.plus(swap.referrerFee);
+                referrerFee.totalRewards = referrerFee.totalRewards.plus(partnerShare);
             }
             referrerFee.save();
         }
@@ -267,14 +275,14 @@ export function handleBoughtV3(event: BoughtV3): void {
         else {
             let partnerFeeId = event.params.partner.toHex() + "-" + feeToken.toHex();
             let partnerFee = PartnerFee.load(partnerFeeId);
-            if (partnerFee == null) {
+            if (!partnerFee) {
                 partnerFee = new PartnerFee(partnerFeeId);
                 partnerFee.partnerAddress = event.params.partner;
                 partnerFee.tokenAddress = feeToken;
-                partnerFee.totalRewards = swap.referrerFee;
+                partnerFee.totalRewards = partnerShare;
             }
             else {
-                partnerFee.totalRewards = partnerFee.totalRewards.plus(swap.referrerFee);
+                partnerFee.totalRewards = partnerFee.totalRewards.plus(partnerShare);
             }
             partnerFee.save();
         }
