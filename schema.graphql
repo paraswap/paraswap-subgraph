@@ -46,16 +46,14 @@ type Fee @entity {
 }
 
 type ReferrerFee @entity {
-  # referrerAddress  + "-" + TokenAddress 
-  id: ID!
+  id: ID! # referrerAddress + "-" + tokenAddress
   referrerAddress: Bytes!
   tokenAddress: Bytes!
   totalRewards: BigInt!
 }
 
 type PartnerFee @entity {
-  # partnerAddress  + "-" + TokenAddress 
-  id: ID!
+  id: ID! # partnerAddress + "-" + tokenAddress
   partnerAddress: Bytes!
   tokenAddress: Bytes!
   totalRewards: BigInt!

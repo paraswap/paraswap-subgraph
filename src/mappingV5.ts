@@ -1,4 +1,4 @@
-import { Address, BigInt, TypedMap, ByteArray, log, crypto } from "@graphprotocol/graph-ts";
+import { Address, BigInt, ByteArray, log, crypto } from "@graphprotocol/graph-ts";
 import {
     Bought,
     Bought2,
