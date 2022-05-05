@@ -86,8 +86,8 @@ export function handleSwappedV3(event: SwappedV3): void {
         'sell'
     );
 
-    let partnerShare = feeShare.get('partnerFee');
-    let paraswapShare = feeShare.get('paraswapFee');
+    let partnerShare = feeShare.partnerShare;
+    let paraswapShare = feeShare.paraswapShare;
 
     let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
     let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent) ? event.params.srcToken : event.params.destToken;
@@ -219,8 +219,8 @@ export function handleBoughtV3(event: BoughtV3): void {
         'buy'
     );
 
-    let partnerShare = feeShare.get('partnerFee');
-    let paraswapShare = feeShare.get('paraswapFee');
+    let partnerShare = feeShare.partnerShare;
+    let paraswapShare = feeShare.paraswapShare;
 
     let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
     let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent) ? event.params.srcToken : event.params.destToken;
