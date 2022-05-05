@@ -8,15 +8,17 @@ dataSources:
     name: AugustusSwapperV5
     network: matic
     source:
-      address: "0xbd09504819a604ca503F30D2Cc9D0Ef4C76dac33"
+      address: "0x64f72FcFd9C624E3e471223F043060981C83AaFc"
       abi: AugustusSwapperV5
-      startBlock: 25933836
+      startBlock: 27942391
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Swap
+        - ReferrerFee
+        - PartnerFee
       abis:
         - name: AugustusSwapperV5
           file: ./abis/AugustusSwapperV5.json
@@ -29,4 +31,8 @@ dataSources:
           handler: handleSwapped2
         - event: Bought2(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleBought2
+        - event: SwappedV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleSwappedV3
+        - event: BoughtV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleBoughtV3
       file: ./src/mappingV5.ts
