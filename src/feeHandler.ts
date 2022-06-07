@@ -9,7 +9,7 @@ let partnerSharePercent = BigInt.fromI32(8500);
 let maxFeePercent = BigInt.fromI32(500);
 let nullAddress = "0x0000000000000000000000000000000000000000";
 
-export function calcFeeShare(
+export function calcFeeShareV3(
     feeCode: BigInt,
     partner: Bytes,
     fromAmount: BigInt,
@@ -175,4 +175,69 @@ export function _isTakeFeeFromSrcToken(feeCode: BigInt): boolean {
 
 export function _isReferralProgram(feeCode: BigInt): boolean {
     return feeCode.rightShift(248).notEqual(BigInt.fromI32(0)) && feeCode.bitAnd(BigInt.fromI32(1 << 16)).notEqual(BigInt.fromI32(0));
+}
+
+// V2 (Swapped2 & Bought2)
+export function calcFeeShareV2(
+    feeCode: BigInt,
+    partner: Bytes,
+    receivedAmount: BigInt,
+    expectedAmount: BigInt
+): FeeShare {
+    if (feeCode != BigInt.fromI32(0) && partner.toHex() != nullAddress) {
+        let version = feeCode.rightShift(248);
+        if (version.equals(BigInt.fromI32(0))) {
+            return calcCompleteFeeV2(
+                feeCode.gt(maxFeePercent) ? maxFeePercent : feeCode,
+                receivedAmount,
+                expectedAmount,
+                true
+            )
+        }
+        // version == 1
+        else {
+            let feeBps = feeCode.bitAnd(BigInt.fromI32(0x3FFF));
+            let positiveSlippageToUser = (feeCode.bitAnd(BigInt.fromI32(1 << 14))).notEqual(BigInt.fromI32(0));
+            return calcCompleteFeeV2(
+                feeBps.gt(maxFeePercent) ? maxFeePercent : feeBps,
+                receivedAmount,
+                expectedAmount,
+                positiveSlippageToUser
+            )
+        }
+    }
+    else {
+        let feeShare = new FeeShare();
+        return feeShare;
+    }
+}
+
+export function calcCompleteFeeV2(
+    feeCode: BigInt,
+    receivedAmount: BigInt,
+    expectedAmount: BigInt,
+    positiveSlippageToUser: boolean
+): FeeShare {
+
+    let feeShare = new FeeShare();
+    let takeSlippage: boolean = feeCode <= BigInt.fromI32(50) && receivedAmount.gt(expectedAmount);
+
+    if (feeCode.gt(BigInt.fromI32(0))) {
+        let baseAmount: BigInt = takeSlippage ? expectedAmount : receivedAmount;
+        let totalFees: BigInt = baseAmount.times(feeCode).div(BigInt.fromI32(10000));
+        feeShare.partnerShare = totalFees.times(partnerSharePercent).div(BigInt.fromI32(10000));
+        feeShare.paraswapShare = totalFees.minus(feeShare.partnerShare);
+    }
+
+    if (takeSlippage) {
+        let halfPositiveSlippage = (receivedAmount.minus(expectedAmount)).div(BigInt.fromI32(2));
+        let currentParaswapShare = feeShare.paraswapShare;
+        feeShare.paraswapShare = currentParaswapShare.plus(halfPositiveSlippage);
+
+        if (!positiveSlippageToUser) {
+            let currentPartnerShare = feeShare.partnerShare;
+            feeShare.partnerShare = currentPartnerShare.plus(halfPositiveSlippage);
+        }
+    }
+    return feeShare;
 }
