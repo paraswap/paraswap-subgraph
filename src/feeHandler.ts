@@ -184,10 +184,12 @@ export function calcFeeShareV2(
     receivedAmount: BigInt,
     expectedAmount: BigInt
 ): FeeShare {
+    
+    let feeShare = new FeeShare();
     if (feeCode != BigInt.fromI32(0) && partner.toHex() != nullAddress) {
         let version = feeCode.rightShift(248);
         if (version.equals(BigInt.fromI32(0))) {
-            return calcCompleteFeeV2(
+            feeShare = calcCompleteFeeV2(
                 feeCode.gt(maxFeePercent) ? maxFeePercent : feeCode,
                 receivedAmount,
                 expectedAmount,
@@ -198,7 +200,7 @@ export function calcFeeShareV2(
         else {
             let feeBps = feeCode.bitAnd(BigInt.fromI32(0x3FFF));
             let positiveSlippageToUser = (feeCode.bitAnd(BigInt.fromI32(1 << 14))).notEqual(BigInt.fromI32(0));
-            return calcCompleteFeeV2(
+            feeShare = calcCompleteFeeV2(
                 feeBps.gt(maxFeePercent) ? maxFeePercent : feeBps,
                 receivedAmount,
                 expectedAmount,
@@ -206,11 +208,15 @@ export function calcFeeShareV2(
             )
         }
     }
-    else {
-        let feeShare = new FeeShare();
-        return feeShare;
+    
+    // If fee = 0
+    if (feeShare.paraswapShare.plus(feeShare.partnerShare) == BigInt.fromI32(0)) {
+        if (receivedAmount > expectedAmount) {
+            let posSlippageShare = (receivedAmount.minus(expectedAmount)).div(BigInt.fromI32(2));
+            feeShare.paraswapShare = posSlippageShare;
+        }
     }
-}
+    return feeShare;
 
 export function calcCompleteFeeV2(
     feeCode: BigInt,
