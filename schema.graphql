@@ -18,6 +18,10 @@ type Swap @entity {
   destAmount: BigInt!
   expectedAmount: BigInt
   referrer: String
+  referrerFee: BigInt
+  paraswapFee: BigInt
+  referralProgram: Boolean
+  feeToken: Bytes
   feeCode: BigInt
   txHash: Bytes!
   txOrigin: Bytes! # address
@@ -39,4 +43,18 @@ type Fee @entity {
   txHash: Bytes!
   blockNumber: BigInt!
   timestamp: BigInt!
+}
+
+type ReferrerFee @entity {
+  id: ID! # referrerAddress + "-" + tokenAddress
+  referrerAddress: Bytes!
+  tokenAddress: Bytes!
+  totalRewards: BigInt!
+}
+
+type PartnerFee @entity {
+  id: ID! # partnerAddress + "-" + tokenAddress
+  partnerAddress: Bytes!
+  tokenAddress: Bytes!
+  totalRewards: BigInt!
 }
