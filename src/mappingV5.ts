@@ -118,7 +118,7 @@ export function handleSwappedV3(event: SwappedV3): void {
     swap.timestamp = event.block.timestamp;
     swap.save();
 
-    if (partnerShare > BigInt.fromI32(0)) {
+    if (partnerShare.gt(BigInt.fromI32(0))) {
         // ReferrerFee entity
         if (isReferralProgramBool) {
             let referrerFeeId = event.params.partner.toHex() + "-" + feeToken.toHex();
@@ -261,7 +261,7 @@ export function handleBoughtV3(event: BoughtV3): void {
     swap.timestamp = event.block.timestamp;
     swap.save();
 
-    if (partnerShare > BigInt.fromI32(0)) {
+    if (partnerShare.gt(BigInt.fromI32(0))) {
         // ReferrerFee entity
         if (isReferralProgramBool) {
             let referrerFeeId = event.params.partner.toHex() + "-" + feeToken.toHex();
