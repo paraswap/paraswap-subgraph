@@ -186,7 +186,7 @@ export function calcFeeShareV2(
 ): FeeShare {
     
     let feeShare = new FeeShare();
-    if (feeCode != BigInt.fromI32(0) && partner.toHex() != nullAddress) {
+    if (feeCode.notEqual(BigInt.fromI32(0)) && partner.toHex() != nullAddress) {
         let version = feeCode.rightShift(248);
         if (version.equals(BigInt.fromI32(0))) {
             feeShare = calcCompleteFeeV2(
@@ -226,7 +226,7 @@ export function calcCompleteFeeV2(
 ): FeeShare {
 
     let feeShare = new FeeShare();
-    let takeSlippage: boolean = feeCode <= BigInt.fromI32(50) && receivedAmount.gt(expectedAmount);
+    let takeSlippage: boolean = feeCode.le(BigInt.fromI32(50)) && receivedAmount.gt(expectedAmount);
 
     if (feeCode.gt(BigInt.fromI32(0))) {
         let baseAmount: BigInt = takeSlippage ? expectedAmount : receivedAmount;
