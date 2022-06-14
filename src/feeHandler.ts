@@ -184,7 +184,6 @@ export function calcFeeShareV2(
     receivedAmount: BigInt,
     expectedAmount: BigInt
 ): FeeShare {
-    
     let feeShare = new FeeShare();
     if (feeCode.notEqual(BigInt.fromI32(0)) && partner.toHex() != nullAddress) {
         let version = feeCode.rightShift(248);
@@ -208,7 +207,7 @@ export function calcFeeShareV2(
             )
         }
     }
-    
+
     // If fee = 0
     if (feeShare.paraswapShare.plus(feeShare.partnerShare).equals(BigInt.fromI32(0))) {
         if (receivedAmount.gt(expectedAmount)) {
