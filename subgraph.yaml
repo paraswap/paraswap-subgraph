@@ -42,6 +42,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Swap
+        - ReferrerFee
+        - PartnerFee
       abis:
         - name: AugustusSwapperV5
           file: ./abis/AugustusSwapperV5.json
@@ -54,4 +56,8 @@ dataSources:
           handler: handleSwapped2
         - event: Bought2(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleBought2
+        - event: SwappedV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleSwappedV3
+        - event: BoughtV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleBoughtV3
       file: ./src/mappingV5.ts
