@@ -210,8 +210,8 @@ export function calcFeeShareV2(
     }
     
     // If fee = 0
-    if (feeShare.paraswapShare.plus(feeShare.partnerShare) == BigInt.fromI32(0)) {
-        if (receivedAmount > expectedAmount) {
+    if (feeShare.paraswapShare.plus(feeShare.partnerShare).equals(BigInt.fromI32(0))) {
+        if (receivedAmount.gt(expectedAmount)) {
             let posSlippageShare = (receivedAmount.minus(expectedAmount)).div(BigInt.fromI32(2));
             feeShare.paraswapShare = posSlippageShare;
         }
