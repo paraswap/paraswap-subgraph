@@ -217,8 +217,9 @@ export function calcFeeShareV2(
         }
     }
     return feeShare;
+}
 
-export function calcCompleteFeeV2(
+function calcCompleteFeeV2(
     feeCode: BigInt,
     receivedAmount: BigInt,
     expectedAmount: BigInt,
