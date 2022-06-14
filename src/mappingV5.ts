@@ -21,7 +21,7 @@ import {
 } from "../generated/AugustusSwapperV5/AugustusSwapperV5";
 import { UniswapV2Pair } from "../generated/AugustusSwapperV5/UniswapV2Pair";
 import { Swap, ReferrerFee, PartnerFee } from "../generated/schema";
-import { calcFeeShare, _isReferralProgram, _isTakeFeeFromSrcToken } from "./feeHandler";
+import { calcFeeShareV3, calcFeeShareV2, _isReferralProgram, _isTakeFeeFromSrcToken } from "./feeHandler";
 
 export function handleSwapped(event: Swapped): void {
     let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
@@ -50,10 +50,17 @@ export function handleSwapped(event: Swapped): void {
 }
 
 export function handleSwapped2(event: Swapped2): void {
+    let feeShare = calcFeeShareV2(
+        event.params.feePercent,
+        event.params.partner,
+        event.params.receivedAmount,
+        event.params.expectedAmount
+    );
+
     let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
     swap.uuid = event.params.uuid;
     swap.augustus = event.address;
-    swap.augustusVersion = '5.0.0';
+    swap.augustusVersion = '5.2.0';
     swap.side = 'Sell';
     swap.method = 'event';
     swap.initiator = event.params.initiator;
@@ -64,7 +71,10 @@ export function handleSwapped2(event: Swapped2): void {
     swap.destAmount = event.params.receivedAmount;
     swap.expectedAmount = event.params.expectedAmount;
     swap.referrer = event.params.partner.toHex();
+    swap.referrerFee = feeShare.partnerShare;
+    swap.paraswapFee = feeShare.paraswapShare;
     swap.feeCode = event.params.feePercent;
+    swap.feeToken = event.params.destToken;
     swap.txHash = event.transaction.hash;
     swap.txOrigin = event.transaction.from;
     swap.txTarget = event.transaction.to;
@@ -77,7 +87,7 @@ export function handleSwapped2(event: Swapped2): void {
 }
 
 export function handleSwappedV3(event: SwappedV3): void {
-    let feeShare = calcFeeShare(
+    let feeShare = calcFeeShareV3(
         event.params.feePercent,
         event.params.partner,
         event.params.srcAmount,
@@ -95,7 +105,7 @@ export function handleSwappedV3(event: SwappedV3): void {
     let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
     swap.uuid = event.params.uuid;
     swap.augustus = event.address;
-    swap.augustusVersion = '5.0.0';
+    swap.augustusVersion = '5.3.0';
     swap.side = 'Sell';
     swap.method = 'event';
     swap.initiator = event.params.initiator;
@@ -183,10 +193,17 @@ export function handleBought(event: Bought): void {
 }
 
 export function handleBought2(event: Bought2): void {
+    let feeShare = calcFeeShareV2(
+        event.params.feePercent,
+        event.params.partner,
+        event.params.receivedAmount,
+        event.params.receivedAmount //need to confirm this
+    );
+
     let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
     swap.uuid = event.params.uuid;
     swap.augustus = event.address;
-    swap.augustusVersion = '5.0.0';
+    swap.augustusVersion = '5.2.0';
     swap.side = 'Buy';
     swap.method = 'event';
     swap.initiator = event.params.initiator;
@@ -197,7 +214,10 @@ export function handleBought2(event: Bought2): void {
     swap.destAmount = event.params.receivedAmount;
     //swap.expectedAmount
     swap.referrer = event.params.partner.toHex();
+    swap.referrerFee = feeShare.partnerShare;
+    swap.paraswapFee = feeShare.paraswapShare;
     swap.feeCode = event.params.feePercent;
+    swap.feeToken = event.params.destToken;
     swap.txHash = event.transaction.hash;
     swap.txOrigin = event.transaction.from;
     swap.txTarget = event.transaction.to;
@@ -210,7 +230,7 @@ export function handleBought2(event: Bought2): void {
 }
 
 export function handleBoughtV3(event: BoughtV3): void {
-    let feeShare = calcFeeShare(
+    let feeShare = calcFeeShareV3(
         event.params.feePercent,
         event.params.partner,
         event.params.srcAmount,
@@ -228,7 +248,7 @@ export function handleBoughtV3(event: BoughtV3): void {
     let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
     swap.uuid = event.params.uuid;
     swap.augustus = event.address;
-    swap.augustusVersion = '5.0.0';
+    swap.augustusVersion = '5.3.0';
     swap.side = 'Buy';
     swap.method = 'event';
     swap.initiator = event.params.initiator;
