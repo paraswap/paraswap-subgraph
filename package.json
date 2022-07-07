@@ -1,13 +1,13 @@
 {
-  "name": "paraswap-subgraph-fantom",
+  "name": "paraswap-subgraph-arbitrum",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ paraswap/paraswap-subgraph-fantom",
-    "create-local": "graph create --node http://localhost:8020/ paraswap/paraswap-subgraph-fantom",
-    "remove-local": "graph remove --node http://localhost:8020/ paraswap/paraswap-subgraph-fantom",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 paraswap/paraswap-subgraph-fantom"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ paraswap/paraswap-subgraph-arbitrum",
+    "create-local": "graph create --node http://localhost:8020/ paraswap/paraswap-subgraph-arbitrum",
+    "remove-local": "graph remove --node http://localhost:8020/ paraswap/paraswap-subgraph-arbitrum",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 paraswap/paraswap-subgraph-arbitrum"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.20.0",
