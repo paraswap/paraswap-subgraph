@@ -3,9 +3,9 @@
 > To read more about Paraswap, visit the official documentaion page [here](https://doc.paraswap.network/).
 
 ### About the Subgraph
-This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Fantom** (fantom) chain. This subgraph supports the latest v5 release.
+This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Optimism** (optimism) chain. This subgraph supports the latest v5 release.
 
-> You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/hosted-service/subgraph/paraswap/paraswap-subgraph-fantom).
+> You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/hosted-service/subgraph/paraswap/paraswap-subgraph-optimism).
 
 ### Instructions to run locally
 #### Setup Graph Node
