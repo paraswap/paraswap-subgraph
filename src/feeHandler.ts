@@ -210,12 +210,14 @@ export function _isReferralProgram(feeCode: BigInt): boolean {
   // To understand that, we pass 17 bit from backend and here we check for it
   // We should return false in that case, because it is not normal referral situation
   const isNoFeeAndSplitSlippage =
-    feeCode.bitAnd(new BigInt(1 << 17)) === new BigInt(1);
+    feeCode.bitAnd(BigInt.fromI32(1 << 17)) === BigInt.fromI32(1);
 
-  return isNoFeeAndSplitSlippage
-    ? false
-    : feeCode.rightShift(248).notEqual(BigInt.fromI32(0)) &&
-        feeCode.bitAnd(BigInt.fromI32(1 << 16)).notEqual(BigInt.fromI32(0));
+  if (isNoFeeAndSplitSlippage) return false;
+
+  return (
+    feeCode.rightShift(248).notEqual(BigInt.fromI32(0)) &&
+    feeCode.bitAnd(BigInt.fromI32(1 << 16)).notEqual(BigInt.fromI32(0))
+  );
 }
 
 // V2 (Swapped2 & Bought2)
