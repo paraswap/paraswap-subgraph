@@ -206,6 +206,8 @@ dataSources:
           handler: handleSwappedV3
         - event: BoughtV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleBoughtV3
+        - event: SwappedDirect(bytes16,address,uint256,address,uint8,address,address,address,uint256,uint256,uint256)
+          handler: handleSwappedDirect
       callHandlers:
         - function: swapOnUniswap(uint256,uint256,address[])
           handler: handleSwapOnUniswap
@@ -231,4 +233,16 @@ dataSources:
           handler: handleSwapOnZeroXv4
         - function: swapOnZeroXv4WithPermit(address,address,uint256,uint256,address,bytes,bytes)
           handler: handleSwapOnZeroXv4WithPermit
+        - function: directUniV3Swap((address,address,address,uint256,uint256,uint256,uint256,uint256,address,bool,address,bytes,bytes,bytes16))
+          handler: handleDirectUniV3Swap
+        - function: directUniV3Buy((address,address,address,uint256,uint256,uint256,uint256,uint256,address,bool,address,bytes,bytes,bytes16))
+          handler: handleDirectUniV3Buy
+        - function: directCurveV1Swap((address,address,address,uint256,uint256,uint256,uint256,int128,int128,address,bool,uint8,address,bool,bytes,bytes16))
+          handler: handleDirectCurveV1Swap
+        - function: directCurveV2Swap((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,address,bool,uint8,address,bool,bytes,bytes16))
+          handler: handleDirectCurveV2Swap
+        - function: directBalancerV2GivenInSwap(((bytes32,uint256,uint256,uint256,bytes)[],address[],(address,bool,address,bool),int256[],uint256,uint256,uint256,uint256,uint256,address,address,bool,address,bytes,bytes16))
+          handler: handleDirectBalancerV2GivenInSwap
+        - function: directBalancerV2GivenOutSwap(((bytes32,uint256,uint256,uint256,bytes)[],address[],(address,bool,address,bool),int256[],uint256,uint256,uint256,uint256,uint256,address,address,bool,address,bytes,bytes16))
+          handler: handleDirectBalancerV2GivenOutSwap
       file: ./src/mappingV5.ts
