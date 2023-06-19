@@ -206,7 +206,7 @@ dataSources:
           handler: handleSwappedV3
         - event: BoughtV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleBoughtV3
-        - event: SwappedDirect(bytes16,address,uint256,address,uint8,address,address,address,uint256,uint256,uint256)
+        - event: SwappedDirect(bytes16,address,uint256,address,uint8,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleSwappedDirect
       callHandlers:
         - function: swapOnUniswap(uint256,uint256,address[])
