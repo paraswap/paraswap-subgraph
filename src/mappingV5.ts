@@ -347,14 +347,30 @@ export function handleBoughtV3(event: BoughtV3): void {
   }
 }
 
+/*
+Given that
+    enum DirectSwapKind {
+        UNIV3_SELL,
+        UNIV3_BUY,
+        CURVEV1,
+        CURVEV2,
+        BALV2_SELL,
+        BALV2_BUY
+    }
+*/
+let UNIV3_BUY_KIND = BigInt.fromI32(1);
+let BALV2_BUY_KIND = BigInt.fromI32(5);
 export function handleSwappedDirect(event: SwappedDirect): void {
+  let kind = event.params.kind;
+  let side = (kind == UNIV3_BUY_KIND || kind == BALV2_BUY_KIND) ? "Buy" : "Sell"
+  let sideLow = side === 'Buy' ? 'buy' : 'sell'
   let feeShare = calcFeeShareV3(
     event.params.feePercent,
     event.params.partner,
     event.params.srcAmount,
     event.params.receivedAmount,
     event.params.expectedAmount,
-    "buy"
+    sideLow
   );
 
   let partnerShare = feeShare.partnerShare;
@@ -374,7 +390,7 @@ export function handleSwappedDirect(event: SwappedDirect): void {
   swap.uuid = event.params.uuid;
   swap.augustus = event.address;
   swap.augustusVersion = "5.3.0";
-  swap.side = "Buy";
+  swap.side = side;
   swap.method = "event";
   swap.initiator = event.params.initiator;
   swap.beneficiary = event.params.beneficiary;
