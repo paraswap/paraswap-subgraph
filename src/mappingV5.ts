@@ -361,8 +361,8 @@ Given that
 let UNIV3_BUY_KIND = BigInt.fromI32(1);
 let BALV2_BUY_KIND = BigInt.fromI32(5);
 export function handleSwappedDirect(event: SwappedDirect): void {
-  let kind = event.params.kind;
-  let side = (kind == UNIV3_BUY_KIND || kind == BALV2_BUY_KIND) ? "Buy" : "Sell"
+  let kind = BigInt.fromI32(event.params.kind);
+  let side = (UNIV3_BUY_KIND.equals(kind) || BALV2_BUY_KIND.equals(kind)) ? "Buy" : "Sell"
   let sideLow = side === 'Buy' ? 'buy' : 'sell'
   let feeShare = calcFeeShareV3(
     event.params.feePercent,
