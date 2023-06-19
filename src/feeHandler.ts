@@ -132,6 +132,7 @@ function calcToTokenFeeWithSlippage(
   return feeShare;
 }
 
+// Note: this function now returns non-zero fees even for cases where we don't have fixed fees
 function _getFixedFeeBps(partner: Bytes, feeCode: BigInt): BigInt {
   let fixedFeeBps = BigInt.fromI32(0);
   if (partner.toHex() == nullAddress) {
@@ -143,8 +144,9 @@ function _getFixedFeeBps(partner: Bytes, feeCode: BigInt): BigInt {
   } else if (
     feeCode.bitAnd(BigInt.fromI32(1 << 16)).notEqual(BigInt.fromI32(0))
   ) {
-    // referrer program only has slippage fees
-    return fixedFeeBps;
+    // both referrer and isNoFeeAndPositiveSlippageToPartner falls here too. Returning to prevent capping with max here as not related
+    // note: this is deviation from contract logic but used for convience. Better design: refactor contract and subgraph together
+    return feeCode.bitAnd(BigInt.fromI32(0x3fff))
   } else {
     fixedFeeBps = feeCode.bitAnd(BigInt.fromI32(0x3fff));
   }
