@@ -17,35 +17,20 @@ export function calcFeeShareV3(
   expectedAmount: BigInt,
   swapType: string
 ): FeeShare {
-  // Src Token
-  if (_isTakeFeeFromSrcToken(feeCode)) {
-    if (swapType == "sell") {
-      return calcFromTokenFee(fromAmount, partner, feeCode);
-    }
-    // Buy
-    else {
-      return calcFromTokenFeeWithSlippage(
-        fromAmount,
-        expectedAmount,
-        partner,
-        feeCode
-      );
+  const shouldTakeSlippage = _isReferralProgram(feeCode) || _isNoFeeAndSplitSlippage(feeCode) || partner.toHex() == nullAddress;
+
+  if(shouldTakeSlippage) {
+    if(swapType == "sell") {
+      return calcToTokenFeeWithSlippage(fromAmount, expectedAmount, partner, feeCode);
+    } else {
+      return calcFromTokenFeeWithSlippage(fromAmount, expectedAmount, partner, feeCode);
     }
   }
-  // Dest Token
-  else {
-    if (swapType == "sell") {
-      return calcToTokenFeeWithSlippage(
-        receivedAmount,
-        expectedAmount,
-        partner,
-        feeCode
-      );
-    }
-    // Buy
-    else {
-      return calcToTokenFee(receivedAmount, partner, feeCode);
-    }
+  
+  if(_isTakeFeeFromSrcToken(feeCode)){
+    return calcFromTokenFee(fromAmount, partner, feeCode)
+  } else {
+    return calcToTokenFee(receivedAmount, partner, feeCode);
   }
 }
 
