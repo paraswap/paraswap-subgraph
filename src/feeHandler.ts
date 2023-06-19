@@ -128,7 +128,7 @@ function _getFixedFeeBps(partner: Bytes, feeCode: BigInt): BigInt {
 }
 
 function _calcSlippage(
-  fixedFeeBps: BigInt, // not used anyore as contract logic has been removed
+  fixedFeeBps: BigInt, // not used anymore as contract logic has been removed
   positiveAmount: BigInt,
   negativeAmount: BigInt
 ): BigInt {
