@@ -273,7 +273,7 @@ export function handleBoughtV3(event: BoughtV3): void {
 
   let feeCode = event.params.feePercent;
   let isReferralProgramBool = _isReferralProgram(feeCode);
-  // on buy case for referral or when partner set no fee but take slippage, we ignore 15th flag (flag is set to take right contract path)
+  // on buy case for referral or when partner set no fee but take slippage, we ignore 15th bit flag as it's set to take correct execution path only
   let feeToken = isReferralProgramBool || _isNoFeeAndSplitSlippage(feeCode) ? event.params.srcToken : 
     _isTakeFeeFromSrcToken(feeCode)
         ? event.params.srcToken
