@@ -379,7 +379,7 @@ export function handleSwappedDirect(event: SwappedDirect): void {
   let feeCode = event.params.feePercent;
   let isReferralProgramBool = _isReferralProgram(feeCode);
   let feeToken = _isTakeSlippage(feeCode, event.params.partner) ? 
-    event.params.destToken : // sell design ensures slippage on destToken only
+    ( sideLow === 'sell' ? event.params.destToken : event.params.srcToken ):
     _isTakeFeeFromSrcToken(event.params.feePercent)
       ? event.params.srcToken
       : event.params.destToken;
