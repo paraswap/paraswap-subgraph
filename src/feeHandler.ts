@@ -205,14 +205,15 @@ export function _isTakeFeeFromSrcToken(feeCode: BigInt): boolean {
   );
 }
 
+export function _isNoFeeAndSplitSlippage(feeCode: BigInt): boolean {
+  return feeCode.bitAnd(BigInt.fromI32(1 << 17)) === BigInt.fromI32(1)
+}
+
 export function _isReferralProgram(feeCode: BigInt): boolean {
   // This is a special hack check, when partnerFee is 0 and we split slippage between partner and ParaSwap
   // To understand that, we pass 17 bit from backend and here we check for it
   // We should return false in that case, because it is not normal referral situation
-  const isNoFeeAndSplitSlippage =
-    feeCode.bitAnd(BigInt.fromI32(1 << 17)) === BigInt.fromI32(1);
-
-  if (isNoFeeAndSplitSlippage) return false;
+  if (_isNoFeeAndSplitSlippage(feeCode)) return false;
 
   return (
     feeCode.rightShift(248).notEqual(BigInt.fromI32(0)) &&

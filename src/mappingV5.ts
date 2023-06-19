@@ -38,7 +38,8 @@ import {
   calcFeeShareV3,
   calcFeeShareV2,
   _isReferralProgram,
-  _isTakeFeeFromSrcToken
+  _isTakeFeeFromSrcToken,
+  _isNoFeeAndSplitSlippage
 } from "./feeHandler";
 
 export function handleSwapped(event: Swapped): void {
@@ -270,10 +271,13 @@ export function handleBoughtV3(event: BoughtV3): void {
   let partnerShare = feeShare.partnerShare;
   let paraswapShare = feeShare.paraswapShare;
 
-  let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
-  let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent)
-    ? event.params.srcToken
-    : event.params.destToken;
+  let feeCode = event.params.feePercent;
+  let isReferralProgramBool = _isReferralProgram(feeCode);
+  // on buy case for referral or when partner set no fee but take slippage, we ignore 15th flag (flag is set to take right contract path)
+  let feeToken = isReferralProgramBool || _isNoFeeAndSplitSlippage(feeCode) ? event.params.srcToken : 
+    _isTakeFeeFromSrcToken(feeCode)
+        ? event.params.srcToken
+        : event.params.destToken;
 
   let swap = new Swap(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
