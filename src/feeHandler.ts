@@ -141,11 +141,11 @@ function _getFixedFeeBps(partner: Bytes, feeCode: BigInt): BigInt {
 }
 
 function _calcSlippage(
-  fixedFeeBps: BigInt,
+  fixedFeeBps: BigInt, // not used anyore as contract logic has been removed
   positiveAmount: BigInt,
   negativeAmount: BigInt
 ): BigInt {
-  return fixedFeeBps.le(BigInt.fromI32(50)) && positiveAmount.gt(negativeAmount)
+  return positiveAmount.gt(negativeAmount)
     ? positiveAmount.minus(negativeAmount)
     : BigInt.fromI32(0);
 }
