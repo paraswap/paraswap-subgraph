@@ -9,6 +9,8 @@ let partnerSharePercent = BigInt.fromI32(8500);
 let maxFeePercent = BigInt.fromI32(500);
 let nullAddress = "0x0000000000000000000000000000000000000000";
 
+// Since https://vote.paraswap.network/#/proposal/0x95c0961f9cb8ea22723621a05e4e1142e70c108e35c3973d1b03b1e8ba70c165, 
+// partner fees are applied on top of received amounts and if partner choose to take only slippage it's mutually exclusive with take non-zero fixed fee scenario
 export function calcFeeShareV3(
   feeCode: BigInt,
   partner: Bytes,
