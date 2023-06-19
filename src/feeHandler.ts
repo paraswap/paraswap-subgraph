@@ -8,6 +8,8 @@ class FeeShare {
 let partnerSharePercent = BigInt.fromI32(8500);
 let maxFeePercent = BigInt.fromI32(500);
 let nullAddress = "0x0000000000000000000000000000000000000000";
+let paraswapSlippageShare = BigInt.fromI32(10000); // taking 100% since https://vote.paraswap.network/#/proposal/0x95c0961f9cb8ea22723621a05e4e1142e70c108e35c3973d1b03b1e8ba70c165
+let paraswapReferralShare = BigInt.fromI32(5000); // taking 50% and split with referrer with 25% and user 25% since https://vote.paraswap.network/#/proposal/0x9e24543d4e7b932904f5082a635ef8cca82e9e1800458fc9d53fd895467658e7
 
 // Since https://vote.paraswap.network/#/proposal/0x95c0961f9cb8ea22723621a05e4e1142e70c108e35c3973d1b03b1e8ba70c165, 
 // partner fees are applied on top of received amounts and if partner choose to take only slippage it's mutually exclusive with take non-zero fixed fee scenario
@@ -55,13 +57,8 @@ function calcFromTokenFeeWithSlippage(
   feeCode: BigInt
 ): FeeShare {
   let feeShare = new FeeShare();
-
-  let fixedFeeBps = _getFixedFeeBps(partner, feeCode);
-  let slippage = _calcSlippage(fixedFeeBps, expectedAmount, fromAmount);
-
-  if (fixedFeeBps.notEqual(BigInt.fromI32(0))) {
-    feeShare = _calcFixedFees(expectedAmount, fixedFeeBps);
-  }
+  let slippageFeeBps = _getFixedFeeBps(partner, feeCode);
+  let slippage = _calcSlippage(slippageFeeBps, expectedAmount, fromAmount);
 
   if (slippage.notEqual(BigInt.fromI32(0))) {
     let feeSlippageShare = _calcSlippageFees(slippage, partner, feeCode);
@@ -95,16 +92,8 @@ function calcToTokenFeeWithSlippage(
   feeCode: BigInt
 ): FeeShare {
   let feeShare = new FeeShare();
-
-  let fixedFeeBps = _getFixedFeeBps(partner, feeCode);
-  let slippage = _calcSlippage(fixedFeeBps, receivedAmount, expectedAmount);
-
-  if (fixedFeeBps.notEqual(BigInt.fromI32(0))) {
-    feeShare = _calcFixedFees(
-      slippage.notEqual(BigInt.fromI32(0)) ? expectedAmount : receivedAmount,
-      fixedFeeBps
-    );
-  }
+  let slippageFeeShareBps = _getFixedFeeBps(partner, feeCode);
+  let slippage = _calcSlippage(slippageFeeShareBps, receivedAmount, expectedAmount);
 
   if (slippage.notEqual(BigInt.fromI32(0))) {
     let feeSlippageShare = _calcSlippageFees(slippage, partner, feeCode);
@@ -166,24 +155,18 @@ function _calcSlippageFees(
   feeCode: BigInt
 ): FeeShare {
   let feeShare = new FeeShare();
-  feeShare.paraswapShare = slippage.div(BigInt.fromI32(2));
-  if (partner.toHex() != nullAddress) {
-    let version = feeCode.rightShift(248);
-    if (version.notEqual(BigInt.fromI32(0))) {
-      if (feeCode.bitAnd(BigInt.fromI32(1 << 16)).notEqual(BigInt.fromI32(0))) {
-        let feeBps = feeCode.bitAnd(BigInt.fromI32(0x3fff));
-        feeShare.partnerShare = feeShare.paraswapShare
-          .times(
-            feeBps.gt(BigInt.fromI32(10000)) ? BigInt.fromI32(10000) : feeBps
-          )
-          .div(BigInt.fromI32(10000));
-      } else if (
-        feeCode.bitAnd(BigInt.fromI32(1 << 14)).equals(BigInt.fromI32(0))
-      ) {
-        feeShare.partnerShare = feeShare.paraswapShare;
-      }
-    }
+
+  if(partner.toHex() == nullAddress) {
+    feeShare.paraswapShare = slippage.times(paraswapSlippageShare).div(BigInt.fromI32(10000));
+    return feeShare;
   }
+
+  // both _isReferral and _isNoFeeAndSplitSlippage should fall into this case
+  let slippageFeeShareBps = feeCode.bitAnd(BigInt.fromI32(0x3fff));
+
+  feeShare.paraswapShare = slippage.times(paraswapReferralShare).div(BigInt.fromI32(10000));
+  feeShare.partnerShare = slippage.times(slippageFeeShareBps).div(BigInt.fromI32(10000));
+  
   return feeShare;
 }
 
