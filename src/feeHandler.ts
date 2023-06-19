@@ -21,9 +21,7 @@ export function calcFeeShareV3(
   expectedAmount: BigInt,
   swapType: string
 ): FeeShare {
-  const shouldTakeSlippage = _isReferralProgram(feeCode) || _isNoFeeAndSplitSlippage(feeCode) || partner.toHex() == nullAddress;
-
-  if(shouldTakeSlippage) {
+  if(_isTakeSlippage(feeCode, partner)) {
     if(swapType == "sell") {
       return calcToTokenFeeWithSlippage(fromAmount, expectedAmount, partner, feeCode);
     } else {
@@ -191,6 +189,10 @@ export function _isReferralProgram(feeCode: BigInt): boolean {
     feeCode.rightShift(248).notEqual(BigInt.fromI32(0)) &&
     feeCode.bitAnd(BigInt.fromI32(1 << 16)).notEqual(BigInt.fromI32(0))
   );
+}
+
+export function _isTakeSlippage(feeCode: BigInt, partner: Bytes): boolean {
+  return _isReferralProgram(feeCode) || _isNoFeeAndSplitSlippage(feeCode) || partner.toHex() == nullAddress
 }
 
 // V2 (Swapped2 & Bought2)

@@ -39,7 +39,8 @@ import {
   calcFeeShareV2,
   _isReferralProgram,
   _isTakeFeeFromSrcToken,
-  _isNoFeeAndSplitSlippage
+  _isNoFeeAndSplitSlippage,
+  _isTakeSlippage
 } from "./feeHandler";
 
 export function handleSwapped(event: Swapped): void {
@@ -122,10 +123,13 @@ export function handleSwappedV3(event: SwappedV3): void {
   let partnerShare = feeShare.partnerShare;
   let paraswapShare = feeShare.paraswapShare;
 
+  let feeCode = event.params.feePercent;
   let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
-  let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent)
-    ? event.params.srcToken
-    : event.params.destToken;
+  let feeToken = _isTakeSlippage(feeCode, event.params.partner) ?
+    event.params.destToken : // sell design ensures slippage on destToken only
+    _isTakeFeeFromSrcToken(event.params.feePercent)
+      ? event.params.srcToken
+      : event.params.destToken;
 
   let swap = new Swap(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
@@ -273,8 +277,8 @@ export function handleBoughtV3(event: BoughtV3): void {
 
   let feeCode = event.params.feePercent;
   let isReferralProgramBool = _isReferralProgram(feeCode);
-  // on buy case for referral or when partner set no fee but take slippage, we ignore 15th bit flag as it's set to take correct execution path only
-  let feeToken = isReferralProgramBool || _isNoFeeAndSplitSlippage(feeCode) ? event.params.srcToken : 
+  let feeToken = _isTakeSlippage(feeCode, event.params.partner) ? 
+    event.params.srcToken :  // buy design ensures slippage on srcToken only
     _isTakeFeeFromSrcToken(feeCode)
         ? event.params.srcToken
         : event.params.destToken;
@@ -356,10 +360,13 @@ export function handleSwappedDirect(event: SwappedDirect): void {
   let partnerShare = feeShare.partnerShare;
   let paraswapShare = feeShare.paraswapShare;
 
-  let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
-  let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent)
-    ? event.params.srcToken
-    : event.params.destToken;
+  let feeCode = event.params.feePercent;
+  let isReferralProgramBool = _isReferralProgram(feeCode);
+  let feeToken = _isTakeSlippage(feeCode, event.params.partner) ? 
+    event.params.destToken : // sell design ensures slippage on destToken only
+    _isTakeFeeFromSrcToken(event.params.feePercent)
+      ? event.params.srcToken
+      : event.params.destToken;
 
   let swap = new Swap(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
