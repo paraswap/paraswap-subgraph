@@ -125,11 +125,11 @@ export function handleSwappedV3(event: SwappedV3): void {
 
   let feeCode = event.params.feePercent;
   let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
-  let feeToken = _isTakeSlippage(feeCode, event.params.partner) ?
-    event.params.destToken : // sell design ensures slippage on destToken only
-    _isTakeFeeFromSrcToken(event.params.feePercent)
-      ? event.params.srcToken
-      : event.params.destToken;
+  let feeToken = _isTakeSlippage(feeCode, event.params.partner)
+    ? event.params.destToken // sell design ensures slippage on destToken only
+    : _isTakeFeeFromSrcToken(event.params.feePercent)
+    ? event.params.srcToken
+    : event.params.destToken;
 
   let swap = new Swap(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
@@ -277,11 +277,11 @@ export function handleBoughtV3(event: BoughtV3): void {
 
   let feeCode = event.params.feePercent;
   let isReferralProgramBool = _isReferralProgram(feeCode);
-  let feeToken = _isTakeSlippage(feeCode, event.params.partner) ? 
-    event.params.srcToken :  // buy design ensures slippage on srcToken only
-    _isTakeFeeFromSrcToken(feeCode)
-        ? event.params.srcToken
-        : event.params.destToken;
+  let feeToken = _isTakeSlippage(feeCode, event.params.partner)
+    ? event.params.srcToken // buy design ensures slippage on srcToken only
+    : _isTakeFeeFromSrcToken(feeCode)
+    ? event.params.srcToken
+    : event.params.destToken;
 
   let swap = new Swap(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
@@ -362,8 +362,9 @@ let UNIV3_BUY_KIND = BigInt.fromI32(1);
 let BALV2_BUY_KIND = BigInt.fromI32(5);
 export function handleSwappedDirect(event: SwappedDirect): void {
   let kind = BigInt.fromI32(event.params.kind);
-  let side = (UNIV3_BUY_KIND.equals(kind) || BALV2_BUY_KIND.equals(kind)) ? "Buy" : "Sell"
-  let sideLow = side === 'Buy' ? 'buy' : 'sell'
+  let side =
+    UNIV3_BUY_KIND.equals(kind) || BALV2_BUY_KIND.equals(kind) ? "Buy" : "Sell";
+  let sideLow = side === "Buy" ? "buy" : "sell";
   let feeShare = calcFeeShareV3(
     event.params.feePercent,
     event.params.partner,
@@ -378,11 +379,13 @@ export function handleSwappedDirect(event: SwappedDirect): void {
 
   let feeCode = event.params.feePercent;
   let isReferralProgramBool = _isReferralProgram(feeCode);
-  let feeToken = _isTakeSlippage(feeCode, event.params.partner) ? 
-    ( sideLow === 'sell' ? event.params.destToken : event.params.srcToken ):
-    _isTakeFeeFromSrcToken(event.params.feePercent)
-      ? event.params.srcToken
-      : event.params.destToken;
+  let feeToken = _isTakeSlippage(feeCode, event.params.partner)
+    ? sideLow === "sell"
+      ? event.params.destToken
+      : event.params.srcToken
+    : _isTakeFeeFromSrcToken(event.params.feePercent)
+    ? event.params.srcToken
+    : event.params.destToken;
 
   let swap = new Swap(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
@@ -1265,4 +1268,3 @@ export function handleBuyOnUniswapV2ForkWithPermit(
   swap.timestamp = call.block.timestamp;
   swap.save();
 }
-
