@@ -38,7 +38,9 @@ import {
   calcFeeShareV3,
   calcFeeShareV2,
   _isReferralProgram,
-  _isTakeFeeFromSrcToken
+  _isTakeFeeFromSrcToken,
+  _isNoFeeAndSplitSlippage,
+  _isTakeSlippage
 } from "./feeHandler";
 
 export function handleSwapped(event: Swapped): void {
@@ -121,10 +123,13 @@ export function handleSwappedV3(event: SwappedV3): void {
   let partnerShare = feeShare.partnerShare;
   let paraswapShare = feeShare.paraswapShare;
 
+  let feeCode = event.params.feePercent;
   let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
-  let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent)
-    ? event.params.srcToken
-    : event.params.destToken;
+  let feeToken = _isTakeSlippage(feeCode, event.params.partner) ?
+    event.params.destToken : // sell design ensures slippage on destToken only
+    _isTakeFeeFromSrcToken(event.params.feePercent)
+      ? event.params.srcToken
+      : event.params.destToken;
 
   let swap = new Swap(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
@@ -270,10 +275,13 @@ export function handleBoughtV3(event: BoughtV3): void {
   let partnerShare = feeShare.partnerShare;
   let paraswapShare = feeShare.paraswapShare;
 
-  let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
-  let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent)
-    ? event.params.srcToken
-    : event.params.destToken;
+  let feeCode = event.params.feePercent;
+  let isReferralProgramBool = _isReferralProgram(feeCode);
+  let feeToken = _isTakeSlippage(feeCode, event.params.partner) ? 
+    event.params.srcToken :  // buy design ensures slippage on srcToken only
+    _isTakeFeeFromSrcToken(feeCode)
+        ? event.params.srcToken
+        : event.params.destToken;
 
   let swap = new Swap(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
@@ -339,23 +347,42 @@ export function handleBoughtV3(event: BoughtV3): void {
   }
 }
 
+/*
+Given that
+    enum DirectSwapKind {
+        UNIV3_SELL,
+        UNIV3_BUY,
+        CURVEV1,
+        CURVEV2,
+        BALV2_SELL,
+        BALV2_BUY
+    }
+*/
+let UNIV3_BUY_KIND = BigInt.fromI32(1);
+let BALV2_BUY_KIND = BigInt.fromI32(5);
 export function handleSwappedDirect(event: SwappedDirect): void {
+  let kind = BigInt.fromI32(event.params.kind);
+  let side = (UNIV3_BUY_KIND.equals(kind) || BALV2_BUY_KIND.equals(kind)) ? "Buy" : "Sell"
+  let sideLow = side === 'Buy' ? 'buy' : 'sell'
   let feeShare = calcFeeShareV3(
     event.params.feePercent,
     event.params.partner,
     event.params.srcAmount,
     event.params.receivedAmount,
     event.params.expectedAmount,
-    "buy"
+    sideLow
   );
 
   let partnerShare = feeShare.partnerShare;
   let paraswapShare = feeShare.paraswapShare;
 
-  let isReferralProgramBool = _isReferralProgram(event.params.feePercent);
-  let feeToken = _isTakeFeeFromSrcToken(event.params.feePercent)
-    ? event.params.srcToken
-    : event.params.destToken;
+  let feeCode = event.params.feePercent;
+  let isReferralProgramBool = _isReferralProgram(feeCode);
+  let feeToken = _isTakeSlippage(feeCode, event.params.partner) ? 
+    ( sideLow === 'sell' ? event.params.destToken : event.params.srcToken ):
+    _isTakeFeeFromSrcToken(event.params.feePercent)
+      ? event.params.srcToken
+      : event.params.destToken;
 
   let swap = new Swap(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
@@ -363,7 +390,7 @@ export function handleSwappedDirect(event: SwappedDirect): void {
   swap.uuid = event.params.uuid;
   swap.augustus = event.address;
   swap.augustusVersion = "5.3.0";
-  swap.side = "Buy";
+  swap.side = side;
   swap.method = "event";
   swap.initiator = event.params.initiator;
   swap.beneficiary = event.params.beneficiary;
@@ -1239,298 +1266,3 @@ export function handleBuyOnUniswapV2ForkWithPermit(
   swap.save();
 }
 
-export function handleDirectUniV3Swap(call: DirectUniV3SwapCall): void {
-  let srcToken = call.inputs.data.fromToken;
-  let destToken = call.inputs.data.toToken;
-  let swap = new Swap(
-    crypto
-      .keccak256(
-        ByteArray.fromUTF8(
-          "directUniV3Swap-" +
-            call.transaction.hash.toHex() +
-            "-" +
-            srcToken.toHex() +
-            "-" +
-            destToken.toHex() +
-            "-" +
-            call.inputs.data.fromAmount.toString() +
-            "-" +
-            call.inputs.data.toAmount.toString()
-        )
-      )
-      .toHex()
-  );
-  // swap.uuid
-  swap.augustus = call.to;
-  swap.augustusVersion = "5.0.0";
-  swap.side = "Sell";
-  swap.method = "directUniV3Swap";
-  swap.initiator = call.from;
-  swap.beneficiary = call.inputs.data.beneficiary;
-  swap.srcToken = srcToken;
-  swap.destToken = destToken;
-  swap.srcAmount = call.inputs.data.fromAmount;
-  swap.destAmount = call.inputs.data.toAmount;
-  // swap.expectedAmount
-  // swap.referrer = call.inputs.data.referrer.toString();
-  swap.txHash = call.transaction.hash;
-  swap.txOrigin = call.transaction.from;
-  swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
-  swap.txGasPrice = call.transaction.gasPrice;
-  swap.blockHash = call.block.hash;
-  swap.blockNumber = call.block.number;
-  swap.timestamp = call.block.timestamp;
-  swap.save();
-}
-
-export function handleDirectUniV3Buy(call: DirectUniV3BuyCall): void {
-  let srcToken = call.inputs.data.fromToken;
-  let destToken = call.inputs.data.toToken;
-  let swap = new Swap(
-    crypto
-      .keccak256(
-        ByteArray.fromUTF8(
-          "directUniV3Buy-" +
-            call.transaction.hash.toHex() +
-            "-" +
-            srcToken.toHex() +
-            "-" +
-            destToken.toHex() +
-            "-" +
-            call.inputs.data.fromAmount.toString() +
-            "-" +
-            call.inputs.data.toAmount.toString()
-        )
-      )
-      .toHex()
-  );
-  // swap.uuid
-  swap.augustus = call.to;
-  swap.augustusVersion = "5.0.0";
-  swap.side = "Buy";
-  swap.method = "directUniV3Buy";
-  swap.initiator = call.from;
-  swap.beneficiary = call.inputs.data.beneficiary;
-  swap.srcToken = srcToken;
-  swap.destToken = destToken;
-  swap.srcAmount = call.inputs.data.fromAmount;
-  swap.destAmount = call.inputs.data.toAmount;
-  // swap.expectedAmount
-  // swap.referrer = call.inputs.data.referrer.toString();
-  swap.txHash = call.transaction.hash;
-  swap.txOrigin = call.transaction.from;
-  swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
-  swap.txGasPrice = call.transaction.gasPrice;
-  swap.blockHash = call.block.hash;
-  swap.blockNumber = call.block.number;
-  swap.timestamp = call.block.timestamp;
-  swap.save();
-}
-
-export function handleDirectCurveV1(call: DirectCurveV1SwapCall): void {
-  let srcToken = call.inputs.data.fromToken;
-  let destToken = call.inputs.data.toToken;
-  let swap = new Swap(
-    crypto
-      .keccak256(
-        ByteArray.fromUTF8(
-          "directCurveV1Swap-" +
-            call.transaction.hash.toHex() +
-            "-" +
-            srcToken.toHex() +
-            "-" +
-            destToken.toHex() +
-            "-" +
-            call.inputs.data.fromAmount.toString() +
-            "-" +
-            call.inputs.data.toAmount.toString()
-        )
-      )
-      .toHex()
-  );
-  // swap.uuid
-  swap.augustus = call.to;
-  swap.augustusVersion = "5.0.0";
-  swap.side = "Sell";
-  swap.method = "directCurveV1Swap";
-  swap.initiator = call.from;
-  swap.beneficiary = call.inputs.data.beneficiary;
-  swap.srcToken = srcToken;
-  swap.destToken = destToken;
-  swap.srcAmount = call.inputs.data.fromAmount;
-  swap.destAmount = call.inputs.data.toAmount;
-  // swap.expectedAmount
-  // swap.referrer = call.inputs.data.referrer.toString();
-  swap.txHash = call.transaction.hash;
-  swap.txOrigin = call.transaction.from;
-  swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
-  swap.txGasPrice = call.transaction.gasPrice;
-  swap.blockHash = call.block.hash;
-  swap.blockNumber = call.block.number;
-  swap.timestamp = call.block.timestamp;
-  swap.save();
-}
-
-export function handleDirectCurveV2(call: DirectCurveV2SwapCall): void {
-  let srcToken = call.inputs.data.fromToken;
-  let destToken = call.inputs.data.toToken;
-  let swap = new Swap(
-    crypto
-      .keccak256(
-        ByteArray.fromUTF8(
-          "directCurveV2Swap-" +
-            call.transaction.hash.toHex() +
-            "-" +
-            srcToken.toHex() +
-            "-" +
-            destToken.toHex() +
-            "-" +
-            call.inputs.data.fromAmount.toString() +
-            "-" +
-            call.inputs.data.toAmount.toString()
-        )
-      )
-      .toHex()
-  );
-  // swap.uuid
-  swap.augustus = call.to;
-  swap.augustusVersion = "5.0.0";
-  swap.side = "Sell";
-  swap.method = "directCurveV2Swap";
-  swap.initiator = call.from;
-  swap.beneficiary = call.inputs.data.beneficiary;
-  swap.srcToken = srcToken;
-  swap.destToken = destToken;
-  swap.srcAmount = call.inputs.data.fromAmount;
-  swap.destAmount = call.inputs.data.toAmount;
-  // swap.expectedAmount
-  // swap.referrer = call.inputs.data.referrer.toString();
-  swap.txHash = call.transaction.hash;
-  swap.txOrigin = call.transaction.from;
-  swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
-  swap.txGasPrice = call.transaction.gasPrice;
-  swap.blockHash = call.block.hash;
-  swap.blockNumber = call.block.number;
-  swap.timestamp = call.block.timestamp;
-  swap.save();
-}
-
-export function handleDirectBalancerV2GivenInSwap(
-  call: DirectBalancerV2GivenInSwapCall
-): void {
-  let srcToken =
-    call.inputs.data.assets[
-      parseInt(call.inputs.data.swaps[0].assetInIndex.toString())
-    ];
-
-  let destToken =
-    call.inputs.data.assets[
-      parseInt(
-        call.inputs.data.swaps[
-          call.inputs.data.swaps.length - 1
-        ].assetOutIndex.toString()
-      )
-    ];
-  let swap = new Swap(
-    crypto
-      .keccak256(
-        ByteArray.fromUTF8(
-          "directBalancerV2GivenInSwap-" +
-            call.transaction.hash.toHex() +
-            "-" +
-            srcToken.toHex() +
-            "-" +
-            destToken.toHex() +
-            "-" +
-            call.inputs.data.fromAmount.toString() +
-            "-" +
-            call.inputs.data.toAmount.toString()
-        )
-      )
-      .toHex()
-  );
-  // swap.uuid
-  swap.augustus = call.to;
-  swap.augustusVersion = "5.0.0";
-  swap.side = "Sell";
-  swap.method = "directBalancerV2GivenInSwap";
-  swap.initiator = call.from;
-  swap.beneficiary = call.inputs.data.beneficiary;
-  swap.srcToken = srcToken;
-  swap.destToken = destToken;
-  swap.srcAmount = call.inputs.data.fromAmount;
-  swap.destAmount = call.inputs.data.toAmount;
-  // swap.expectedAmount
-  // swap.referrer = call.inputs.data.referrer.toString();
-  swap.txHash = call.transaction.hash;
-  swap.txOrigin = call.transaction.from;
-  swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
-  swap.txGasPrice = call.transaction.gasPrice;
-  swap.blockHash = call.block.hash;
-  swap.blockNumber = call.block.number;
-  swap.timestamp = call.block.timestamp;
-  swap.save();
-}
-
-export function handleDirectBalancerV2GivenOutSwap(
-  call: DirectBalancerV2GivenOutSwapCall
-): void {
-  let srcToken =
-    call.inputs.data.assets[
-      parseInt(call.inputs.data.swaps[0].assetInIndex.toString())
-    ];
-
-  let destToken =
-    call.inputs.data.assets[
-      parseInt(
-        call.inputs.data.swaps[
-          call.inputs.data.swaps.length - 1
-        ].assetOutIndex.toString()
-      )
-    ];
-  let swap = new Swap(
-    crypto
-      .keccak256(
-        ByteArray.fromUTF8(
-          "directBalancerV2GivenOutSwap-" +
-            call.transaction.hash.toHex() +
-            "-" +
-            srcToken.toHex() +
-            "-" +
-            destToken.toHex() +
-            "-" +
-            call.inputs.data.fromAmount.toString() +
-            "-" +
-            call.inputs.data.toAmount.toString()
-        )
-      )
-      .toHex()
-  );
-  // swap.uuid
-  swap.augustus = call.to;
-  swap.augustusVersion = "5.0.0";
-  swap.side = "Buy";
-  swap.method = "directBalancerV2GivenOutSwap";
-  swap.initiator = call.from;
-  swap.beneficiary = call.inputs.data.beneficiary;
-  swap.srcToken = srcToken;
-  swap.destToken = destToken;
-  swap.srcAmount = call.inputs.data.fromAmount;
-  swap.destAmount = call.inputs.data.toAmount;
-  // swap.expectedAmount
-  // swap.referrer = call.inputs.data.referrer.toString();
-  swap.txHash = call.transaction.hash;
-  swap.txOrigin = call.transaction.from;
-  swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
-  swap.txGasPrice = call.transaction.gasPrice;
-  swap.blockHash = call.block.hash;
-  swap.blockNumber = call.block.number;
-  swap.timestamp = call.block.timestamp;
-  swap.save();
-}
