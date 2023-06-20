@@ -196,7 +196,7 @@ export function _isTakeFeeFromSrcToken(feeCode: BigInt): boolean {
 }
 
 export function _isNoFeeAndSplitSlippage(feeCode: BigInt): boolean {
-  return feeCode.bitAnd(BigInt.fromI32(1 << 17)) === BigInt.fromI32(1);
+  return feeCode.bitAnd(BigInt.fromI32(1 << 17)).notEqual(BigInt.fromI32(0));
 }
 
 export function _isReferralProgram(feeCode: BigInt): boolean {
