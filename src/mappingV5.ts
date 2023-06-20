@@ -24,13 +24,7 @@ import {
   SwapOnZeroXv2Call,
   SwapOnZeroXv2WithPermitCall,
   SwapOnZeroXv4Call,
-  SwapOnZeroXv4WithPermitCall,
-  DirectUniV3SwapCall,
-  DirectUniV3BuyCall,
-  DirectCurveV1SwapCall,
-  DirectCurveV2SwapCall,
-  DirectBalancerV2GivenInSwapCall,
-  DirectBalancerV2GivenOutSwapCall
+  SwapOnZeroXv4WithPermitCall
 } from "../generated/AugustusSwapperV5/AugustusSwapperV5";
 import { UniswapV2Pair } from "../generated/AugustusSwapperV5/UniswapV2Pair";
 import { Swap, ReferrerFee, PartnerFee } from "../generated/schema";
