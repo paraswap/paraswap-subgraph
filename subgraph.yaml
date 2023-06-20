@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: Swaps made on ParaSwap
 repository: https://github.com/paraswap/paraswap-subgraph
 schema:
@@ -182,7 +182,7 @@ dataSources:
       startBlock: 13049291
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -194,14 +194,6 @@ dataSources:
         - name: UniswapV2Pair
           file: ./abis/UniswapV2Pair.json
       eventHandlers:
-        - event: Swapped(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
-          handler: handleSwapped
-        - event: Bought(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleBought
-        - event: Swapped2(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
-          handler: handleSwapped2
-        - event: Bought2(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleBought2
         - event: SwappedV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleSwappedV3
         - event: BoughtV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
