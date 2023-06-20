@@ -232,3 +232,8 @@ dataSources:
         - function: swapOnZeroXv4WithPermit(address,address,uint256,uint256,address,bytes,bytes)
           handler: handleSwapOnZeroXv4WithPermit
       file: ./src/mappingV5.ts
+features:
+  - grafting
+graft:
+  base: QmYdt8V7eFmer6Mgc9Fubw33n9EwTxm9ta3KndTd8DKoRn
+  block: 17472048
