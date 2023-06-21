@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: Swaps made on ParaSwap
 repository: https://github.com/paraswap/paraswap-subgraph
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 8650194
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -35,7 +35,7 @@ dataSources:
       startBlock: 8920121
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -57,7 +57,7 @@ dataSources:
       startBlock: 9116915
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -79,7 +79,7 @@ dataSources:
       startBlock: 10161180
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -101,7 +101,7 @@ dataSources:
       startBlock: 10952443
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -125,7 +125,7 @@ dataSources:
       startBlock: 11707760
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -149,7 +149,7 @@ dataSources:
       startBlock: 12161435
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -182,7 +182,7 @@ dataSources:
       startBlock: 13049291
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -206,6 +206,8 @@ dataSources:
           handler: handleSwappedV3
         - event: BoughtV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleBoughtV3
+        - event: SwappedDirect(bytes16,address,uint256,address,uint8,indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleSwappedDirect
       callHandlers:
         - function: swapOnUniswap(uint256,uint256,address[])
           handler: handleSwapOnUniswap
