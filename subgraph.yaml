@@ -33,5 +33,5 @@ dataSources:
 features:
   - grafting
 graft:
-  base: QmV4KMWrpLqiVjiCBNS1d8zcVwAMUSab5CJ7QSXMubNmpB
+  base: QmdQgxDRySmb6gNp2sNuREZtry7m1trAF2uUdCBD3EuQhm
   block: 105530943
