@@ -24,7 +24,7 @@ export function calcFeeShareV3(
   if (_isTakeSlippage(feeCode, partner)) {
     if (swapType == "sell") {
       return calcToTokenFeeWithSlippage(
-        fromAmount,
+        receivedAmount,
         expectedAmount,
         partner,
         feeCode
