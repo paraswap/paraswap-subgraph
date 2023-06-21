@@ -27,7 +27,7 @@ export function handleSwapped(event: Swapped): void {
   swap.txHash = event.transaction.hash;
   swap.txOrigin = event.transaction.from;
   swap.txTarget = event.transaction.to;
-  swap.txGasUsed = event.transaction.gasUsed;
+  swap.txGasUsed = event.transaction.gasLimit;
   swap.txGasPrice = event.transaction.gasPrice;
   swap.blockHash = event.block.hash;
   swap.blockNumber = event.block.number;
@@ -52,7 +52,7 @@ export function handleBought(event: Bought): void {
   swap.txHash = event.transaction.hash;
   swap.txOrigin = event.transaction.from;
   swap.txTarget = event.transaction.to;
-  swap.txGasUsed = event.transaction.gasUsed;
+  swap.txGasUsed = event.transaction.gasLimit;
   swap.txGasPrice = event.transaction.gasPrice;
   swap.blockHash = event.block.hash;
   swap.blockNumber = event.block.number;
@@ -113,7 +113,7 @@ export function handleSwapOnUniswap(call: SwapOnUniswapCall): void {
   swap.txHash = call.transaction.hash;
   swap.txOrigin = call.transaction.from;
   swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
+  swap.txGasUsed = call.transaction.gasLimit;
   swap.txGasPrice = call.transaction.gasPrice;
   swap.blockHash = call.block.hash;
   swap.blockNumber = call.block.number;
@@ -159,7 +159,7 @@ export function handleSwapOnUniswapFork(call: SwapOnUniswapForkCall): void {
   swap.txHash = call.transaction.hash;
   swap.txOrigin = call.transaction.from;
   swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
+  swap.txGasUsed = call.transaction.gasLimit;
   swap.txGasPrice = call.transaction.gasPrice;
   swap.blockHash = call.block.hash;
   swap.blockNumber = call.block.number;
@@ -205,7 +205,7 @@ export function handleBuyOnUniswap(call: BuyOnUniswapCall): void {
   swap.txHash = call.transaction.hash;
   swap.txOrigin = call.transaction.from;
   swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
+  swap.txGasUsed = call.transaction.gasLimit;
   swap.txGasPrice = call.transaction.gasPrice;
   swap.blockHash = call.block.hash;
   swap.blockNumber = call.block.number;
@@ -251,7 +251,7 @@ export function handleBuyOnUniswapFork(call: BuyOnUniswapForkCall): void {
   swap.txHash = call.transaction.hash;
   swap.txOrigin = call.transaction.from;
   swap.txTarget = call.transaction.to;
-  swap.txGasUsed = call.transaction.gasUsed;
+  swap.txGasUsed = call.transaction.gasLimit;
   swap.txGasPrice = call.transaction.gasPrice;
   swap.blockHash = call.block.hash;
   swap.blockNumber = call.block.number;
