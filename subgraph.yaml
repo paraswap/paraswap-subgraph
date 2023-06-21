@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: Swaps made on ParaSwap
 repository: https://github.com/paraswap/paraswap-subgraph/tree/polygon
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 13049712
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -38,7 +38,7 @@ dataSources:
       startBlock: 18118967
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -60,6 +60,8 @@ dataSources:
           handler: handleSwappedV3
         - event: BoughtV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleBoughtV3
+        - event: SwappedDirect(bytes16,address,uint256,address,uint8,indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleSwappedDirect
       file: ./src/mappingV5.ts
 features:
   - grafting
