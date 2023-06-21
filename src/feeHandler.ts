@@ -123,7 +123,9 @@ function calcToTokenFeeWithSlippage(
 // Note: this function now returns non-zero fees even for cases where we don't have fixed fees
 function _getFixedFeeBps(partner: Bytes, feeCode: BigInt): BigInt {
   let fixedFeeBps = BigInt.fromI32(0);
-
+  if (partner.toHex() == nullAddress) {
+    return fixedFeeBps;
+  }
   let version: BigInt = feeCode.rightShift(248);
   if (version.equals(BigInt.fromI32(0))) {
     fixedFeeBps = feeCode;
