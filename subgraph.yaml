@@ -61,3 +61,8 @@ dataSources:
         - event: BoughtV3(bytes16,address,uint256,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleBoughtV3
       file: ./src/mappingV5.ts
+features:
+  - grafting
+graft:
+  base: Qma9vc6wP8ajRz4UTXgZqymAZZzD4sNYN949HNXRWTkiWb
+  block: 43867913
