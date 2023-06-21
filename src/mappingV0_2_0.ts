@@ -21,7 +21,7 @@ export function handleSwapped(event: Swapped): void {
   swap.txHash = event.transaction.hash;
   swap.txOrigin = event.transaction.from;
   swap.txTarget = event.transaction.to;
-  swap.txGasUsed = event.transaction.gasUsed;
+  swap.txGasUsed = event.transaction.gasLimit;
   swap.txGasPrice = event.transaction.gasPrice;
   swap.blockHash = event.block.hash;
   swap.blockNumber = event.block.number;
@@ -46,7 +46,7 @@ export function handlePayed(event: Payed): void {
   swap.txHash = event.transaction.hash;
   swap.txOrigin = event.transaction.from;
   swap.txTarget = event.transaction.to;
-  swap.txGasUsed = event.transaction.gasUsed;
+  swap.txGasUsed = event.transaction.gasLimit;
   swap.txGasPrice = event.transaction.gasPrice;
   swap.blockHash = event.block.hash;
   swap.blockNumber = event.block.number;
