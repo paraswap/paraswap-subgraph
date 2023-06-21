@@ -35,7 +35,7 @@ dataSources:
     source:
       address: "0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57"
       abi: AugustusSwapperV5
-      startBlock: 43867913
+      startBlock: 18118967
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
