@@ -10,7 +10,7 @@
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 paraswap/paraswap-subgraph-bsc"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.20.0",
-    "@graphprotocol/graph-ts": "0.20.0"
+    "@graphprotocol/graph-cli": "0.51.1",
+    "@graphprotocol/graph-ts": "^0.31.0"
   }
 }
