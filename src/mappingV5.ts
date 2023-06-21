@@ -3,6 +3,10 @@ import {
   BoughtV3,
   SwappedV3,
   SwappedDirect,
+  Swapped,
+  Swapped2,
+  Bought,
+  Bought2
 } from "../generated/AugustusSwapperV5/AugustusSwapperV5";
 import { Swap, ReferrerFee, PartnerFee } from "../generated/schema";
 import {
@@ -10,8 +14,72 @@ import {
   _isReferralProgram,
   _isTakeFeeFromSrcToken,
   _isNoFeeAndSplitSlippage,
-  _isTakeSlippage
+  _isTakeSlippage,
+  calcFeeShareV2
 } from "./feeHandler";
+
+export function handleSwapped(event: Swapped): void {
+    let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+    swap.uuid = event.params.uuid;
+    swap.augustus = event.address;
+    swap.augustusVersion = '5.0.0';
+    swap.side = 'Sell';
+    swap.method = 'event';
+    swap.initiator = event.params.initiator;
+    swap.beneficiary = event.params.beneficiary;
+    swap.srcToken = event.params.srcToken;
+    swap.destToken = event.params.destToken;
+    swap.srcAmount = event.params.srcAmount;
+    swap.destAmount = event.params.receivedAmount;
+    swap.expectedAmount = event.params.expectedAmount;
+    // swap.referrer = event.params.referrer;
+    swap.txHash = event.transaction.hash;
+    swap.txOrigin = event.transaction.from;
+    swap.txTarget = event.transaction.to;
+    swap.txGasUsed = event.transaction.gasLimit;
+    swap.txGasPrice = event.transaction.gasPrice;
+    swap.blockHash = event.block.hash;
+    swap.blockNumber = event.block.number;
+    swap.timestamp = event.block.timestamp;
+    swap.save();
+}
+
+export function handleSwapped2(event: Swapped2): void {
+    let feeShare = calcFeeShareV2(
+        event.params.feePercent,
+        event.params.partner,
+        event.params.receivedAmount,
+        event.params.expectedAmount
+    );
+
+    let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+    swap.uuid = event.params.uuid;
+    swap.augustus = event.address;
+    swap.augustusVersion = '5.2.0';
+    swap.side = 'Sell';
+    swap.method = 'event';
+    swap.initiator = event.params.initiator;
+    swap.beneficiary = event.params.beneficiary;
+    swap.srcToken = event.params.srcToken;
+    swap.destToken = event.params.destToken;
+    swap.srcAmount = event.params.srcAmount;
+    swap.destAmount = event.params.receivedAmount;
+    swap.expectedAmount = event.params.expectedAmount;
+    swap.referrer = event.params.partner.toHex();
+    swap.referrerFee = feeShare.partnerShare;
+    swap.paraswapFee = feeShare.paraswapShare;
+    swap.feeCode = event.params.feePercent;
+    swap.feeToken = event.params.destToken;
+    swap.txHash = event.transaction.hash;
+    swap.txOrigin = event.transaction.from;
+    swap.txTarget = event.transaction.to;
+    swap.txGasUsed = event.transaction.gasLimit;
+    swap.txGasPrice = event.transaction.gasPrice;
+    swap.blockHash = event.block.hash;
+    swap.blockNumber = event.block.number;
+    swap.timestamp = event.block.timestamp;
+    swap.save();
+}
 
 export function handleSwappedV3(event: SwappedV3): void {
   let feeShare = calcFeeShareV3(
@@ -97,6 +165,70 @@ export function handleSwappedV3(event: SwappedV3): void {
     }
   }
 }
+
+export function handleBought(event: Bought): void {
+    let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+    swap.uuid = event.params.uuid;
+    swap.augustus = event.address;
+    swap.augustusVersion = '5.0.0';
+    swap.side = 'Buy';
+    swap.method = 'event';
+    swap.initiator = event.params.initiator;
+    swap.beneficiary = event.params.beneficiary;
+    swap.srcToken = event.params.srcToken;
+    swap.destToken = event.params.destToken;
+    swap.srcAmount = event.params.srcAmount;
+    swap.destAmount = event.params.receivedAmount;
+    //swap.expectedAmount
+    // swap.referrer = event.params.referrer;
+    swap.txHash = event.transaction.hash;
+    swap.txOrigin = event.transaction.from;
+    swap.txTarget = event.transaction.to;
+    swap.txGasUsed = event.transaction.gasLimit;
+    swap.txGasPrice = event.transaction.gasPrice;
+    swap.blockHash = event.block.hash;
+    swap.blockNumber = event.block.number;
+    swap.timestamp = event.block.timestamp;
+    swap.save();
+}
+
+export function handleBought2(event: Bought2): void {
+    let feeShare = calcFeeShareV2(
+        event.params.feePercent,
+        event.params.partner,
+        event.params.receivedAmount,
+        event.params.receivedAmount //need to confirm this
+    );
+
+    let swap = new Swap(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+    swap.uuid = event.params.uuid;
+    swap.augustus = event.address;
+    swap.augustusVersion = '5.2.0';
+    swap.side = 'Buy';
+    swap.method = 'event';
+    swap.initiator = event.params.initiator;
+    swap.beneficiary = event.params.beneficiary;
+    swap.srcToken = event.params.srcToken;
+    swap.destToken = event.params.destToken;
+    swap.srcAmount = event.params.srcAmount;
+    swap.destAmount = event.params.receivedAmount;
+    //swap.expectedAmount
+    swap.referrer = event.params.partner.toHex();
+    swap.referrerFee = feeShare.partnerShare;
+    swap.paraswapFee = feeShare.paraswapShare;
+    swap.feeCode = event.params.feePercent;
+    swap.feeToken = event.params.destToken;
+    swap.txHash = event.transaction.hash;
+    swap.txOrigin = event.transaction.from;
+    swap.txTarget = event.transaction.to;
+    swap.txGasUsed = event.transaction.gasLimit;
+    swap.txGasPrice = event.transaction.gasPrice;
+    swap.blockHash = event.block.hash;
+    swap.blockNumber = event.block.number;
+    swap.timestamp = event.block.timestamp;
+    swap.save();
+}
+
 
 
 export function handleBoughtV3(event: BoughtV3): void {
