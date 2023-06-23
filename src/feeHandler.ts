@@ -181,6 +181,13 @@ function _calcSlippageFees(
   feeShare.paraswapShare = slippage
     .times(paraswapReferralShare)
     .div(BigInt.fromI32(10000));
+
+  // transient case when partner do not want to take fee nor slippage
+  // should happen anymore as we nullify partner address and take default positive slippage circuit contract
+  if (_isPartnerNoFeeNoTakeSlippage(partner, feeCode)) {
+    return feeShare;
+  }
+
   feeShare.partnerShare = slippage
     .times(slippageFeeShareBps)
     .div(BigInt.fromI32(10000));
@@ -211,10 +218,22 @@ export function _isReferralProgram(feeCode: BigInt): boolean {
   );
 }
 
+export function _isPartnerNoFeeNoTakeSlippage(
+  partner: Bytes,
+  feeCode: BigInt
+): boolean {
+  return (
+    !_isReferralProgram(feeCode) &&
+    partner.toHex() !== nullAddress &&
+    feeCode.bitAnd(BigInt.fromI32(0x3fff)).equals(BigInt.fromI32(0))
+  );
+}
+
 export function _isTakeSlippage(feeCode: BigInt, partner: Bytes): boolean {
   return (
     _isReferralProgram(feeCode) ||
     _isNoFeeAndSplitSlippage(feeCode) ||
+    _isPartnerNoFeeNoTakeSlippage(partner, feeCode) ||
     partner.toHex() == nullAddress
   );
 }
