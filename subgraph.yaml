@@ -1,12 +1,12 @@
 specVersion: 0.0.4
 description: Swaps made on ParaSwap
-repository: https://github.com/paraswap/paraswap-subgraph/tree/polygon
+repository: https://github.com/paraswap/paraswap-subgraph/tree/polygon-zkevm
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: AugustusSwapperV5
-    network: matic
+    network: polygon-zkevm
     source:
       address: "0xb83b554730d29ce4cb55bb42206c3e2c03e4a40a"
       abi: AugustusSwapperV5
