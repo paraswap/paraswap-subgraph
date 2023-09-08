@@ -5,37 +5,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: AugustusSwapperV4
-    network: matic
-    source:
-      address: "0x90249ed4d69D70E709fFCd8beE2c5A566f65dADE"
-      abi: AugustusSwapperV4
-      startBlock: 13049712
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Swap
-      abis:
-        - name: AugustusSwapperV4
-          file: ./abis/AugustusSwapperV4.json
-      eventHandlers:
-        - event: Bought(address,indexed address,indexed address,indexed address,uint256,uint256,string)
-          handler: handleBought
-        - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
-          handler: handleSwapped
-        - event: FeeTaken(uint256,uint256,uint256)
-          handler: handleFeeTaken
-      file: ./src/mappingV4.ts
-
-  - kind: ethereum/contract
     name: AugustusSwapperV5
     network: matic
     source:
-      address: "0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57"
+      address: "0xb83b554730d29ce4cb55bb42206c3e2c03e4a40a"
       abi: AugustusSwapperV5
-      startBlock: 18118967
+      startBlock: 2729245
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -63,8 +38,3 @@ dataSources:
         - event: SwappedDirect(bytes16,address,uint256,address,uint8,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleSwappedDirect
       file: ./src/mappingV5.ts
-features:
-  - grafting
-graft:
-  base: Qma9vc6wP8ajRz4UTXgZqymAZZzD4sNYN949HNXRWTkiWb
-  block: 43867913
