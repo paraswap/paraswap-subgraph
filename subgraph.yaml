@@ -10,7 +10,7 @@ dataSources:
     source:
       address: "0xb83b554730d29ce4cb55bb42206c3e2c03e4a40a"
       abi: AugustusSwapperV5
-      startBlock: 18118967
+      startBlock: 2729245
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -38,8 +38,3 @@ dataSources:
         - event: SwappedDirect(bytes16,address,uint256,address,uint8,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleSwappedDirect
       file: ./src/mappingV5.ts
-features:
-  - grafting
-graft:
-  base: Qma9vc6wP8ajRz4UTXgZqymAZZzD4sNYN949HNXRWTkiWb
-  block: 43867913
