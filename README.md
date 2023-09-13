@@ -3,15 +3,15 @@
 > To read more about Paraswap, visit the official documentaion page [here](https://doc.paraswap.network/).
 
 ### About the Subgraph
-This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Ethereum** (mainnet) chain. This subgraph supports Paraswap v0.1.0 to the latest v5 release.
+This subgraph dynamically tracks **all the transactions** (swaps) made via Paraswap on the **Base** (matic) chain. This subgraph supports Paraswap v4 and the latest v5 release.
 
-> You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/hosted-service/subgraph/paraswap/paraswap-subgraph).
+> You can query the subgraph via GraphQL from the legacy explorer [here](https://thegraph.com/hosted-service/subgraph/paraswap/paraswap-subgraph-base).
 
 ### Instructions to run locally
 #### Setup Graph Node
 1. Have a local graph-node setup. Please visit https://github.com/graphprotocol/graph-node for more instructions.
 
-2. Start the local graph-node using the instructions. Replace the `[url]` segment of the cargo command with your RPC provider's url with the network prefix. Example (for mainnet):  
+2. Start the local graph-node using the instructions. Replace the `[url]` segment of the cargo command with your RPC provider's url with the network prefix. Example (for mainnet):
     ```
     cargo run -p graph-node --release -- \
     --postgres-url postgresql://USERNAME[:PASSWORD]@localhost:5432/graph-node \

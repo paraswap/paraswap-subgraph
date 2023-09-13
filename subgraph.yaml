@@ -1,185 +1,16 @@
 specVersion: 0.0.4
 description: Swaps made on ParaSwap
-repository: https://github.com/paraswap/paraswap-subgraph
+repository: https://github.com/paraswap/paraswap-subgraph/tree/base
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: AugustusSwapperV0_1_0
-    network: mainnet
-    source:
-      address: "0x6b158039b9678b7452f311deb12dd08c579dad26"
-      abi: AugustusSwapperV0_1_0
-      startBlock: 8650194
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Swap
-      abis:
-        - name: AugustusSwapperV0_1_0
-          file: ./abis/AugustusSwapperV0_1_0.json
-      eventHandlers:
-        - event: Payed(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handlePayed
-        - event: Swapped(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleSwapped
-      file: ./src/mappingV0_1_0.ts
-  - kind: ethereum/contract
-    name: AugustusSwapperV0_2_0
-    network: mainnet
-    source:
-      address: "0x72338b82800400f5488eca2b5a37270ba3b7a111"
-      abi: AugustusSwapperV0_2_0
-      startBlock: 8920121
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Swap
-      abis:
-        - name: AugustusSwapperV0_2_0
-          file: ./abis/AugustusSwapperV0_2_0.json
-      eventHandlers:
-        - event: Payed(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handlePayed
-        - event: Swapped(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleSwapped
-      file: ./src/mappingV0_2_0.ts
-  - kind: ethereum/contract
-    name: AugustusSwapperV0_3_0
-    network: mainnet
-    source:
-      address: "0xf92c1ad75005e6436b4ee84e88cb23ed8a290988"
-      abi: AugustusSwapperV0_3_0
-      startBlock: 9116915
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Swap
-      abis:
-        - name: AugustusSwapperV0_3_0
-          file: ./abis/AugustusSwapperV0_3_0.json
-      eventHandlers:
-        - event: Payed(indexed address,indexed address,indexed address,uint256,uint256,string)
-          handler: handlePayed
-        - event: Swapped(indexed address,indexed address,indexed address,uint256,uint256,string)
-          handler: handleSwapped
-      file: ./src/mappingV0_3_0.ts
-  - kind: ethereum/contract
-    name: AugustusSwapperV1
-    network: mainnet
-    source:
-      address: "0x86969d29f5fd327e1009ba66072be22db6017cc6"
-      abi: AugustusSwapperV1
-      startBlock: 10161180
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Swap
-      abis:
-        - name: AugustusSwapperV1
-          file: ./abis/AugustusSwapperV1.json
-      eventHandlers:
-        - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
-          handler: handleSwapped
-        - event: FeeTaken(uint256,uint256,uint256)
-          handler: handleFeeTaken
-      file: ./src/mappingV1.ts
-  - kind: ethereum/contract
-    name: AugustusSwapperV2
-    network: mainnet
-    source:
-      address: "0x9509665d015Bfe3C77AA5ad6Ca20C8Afa1d98989"
-      abi: AugustusSwapperV2
-      startBlock: 10952443
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Swap
-      abis:
-        - name: AugustusSwapperV2
-          file: ./abis/AugustusSwapperV2.json
-      eventHandlers:
-        - event: Bought(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
-          handler: handleBought
-        - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
-          handler: handleSwapped
-        - event: FeeTaken(uint256,uint256,uint256)
-          handler: handleFeeTaken
-      file: ./src/mappingV2.ts
-  - kind: ethereum/contract
-    name: AugustusSwapperV3
-    network: mainnet
-    source:
-      address: "0xf90e98F3D8Dce44632E5020ABF2E122E0f99DFAb"
-      abi: AugustusSwapperV3
-      startBlock: 11707760
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Swap
-      abis:
-        - name: AugustusSwapperV3
-          file: ./abis/AugustusSwapperV3.json
-      eventHandlers:
-        - event: Bought(address,indexed address,indexed address,indexed address,uint256,uint256,string)
-          handler: handleBought
-        - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
-          handler: handleSwapped
-        - event: FeeTaken(uint256,uint256,uint256)
-          handler: handleFeeTaken
-      file: ./src/mappingV3.ts
-  - kind: ethereum/contract
-    name: AugustusSwapperV4
-    network: mainnet
-    source:
-      address: "0x1bD435F3C054b6e901B7b108a0ab7617C808677b"
-      abi: AugustusSwapperV4
-      startBlock: 12161435
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Swap
-      abis:
-        - name: AugustusSwapperV4
-          file: ./abis/AugustusSwapperV4.json
-      eventHandlers:
-        - event: Bought(address,indexed address,indexed address,indexed address,uint256,uint256,string)
-          handler: handleBought
-        - event: Swapped(address,indexed address,indexed address,indexed address,uint256,uint256,uint256,string)
-          handler: handleSwapped
-        - event: FeeTaken(uint256,uint256,uint256)
-          handler: handleFeeTaken
-      callHandlers:
-        - function: swapOnUniswap(uint256,uint256,address[],uint8)
-          handler: handleSwapOnUniswap
-        - function: swapOnUniswapFork(address,bytes32,uint256,uint256,address[],uint8)
-          handler: handleSwapOnUniswapFork
-        - function: buyOnUniswap(uint256,uint256,address[],uint8)
-          handler: handleBuyOnUniswap
-        - function: buyOnUniswapFork(address,bytes32,uint256,uint256,address[],uint8)
-          handler: handleBuyOnUniswapFork
-      file: ./src/mappingV4.ts
-  - kind: ethereum/contract
     name: AugustusSwapperV5
-    network: mainnet
+    network: base
     source:
-      address: "0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57"
+      address: "0x59c7c832e96d2568bea6db468c1aadcbbda08a52"
       abi: AugustusSwapperV5
-      startBlock: 13049291
+      startBlock: 3685654
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -191,8 +22,6 @@ dataSources:
       abis:
         - name: AugustusSwapperV5
           file: ./abis/AugustusSwapperV5.json
-        - name: UniswapV2Pair
-          file: ./abis/UniswapV2Pair.json
       eventHandlers:
         - event: Swapped(bytes16,address,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleSwapped
@@ -208,34 +37,4 @@ dataSources:
           handler: handleBoughtV3
         - event: SwappedDirect(bytes16,address,uint256,address,uint8,indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleSwappedDirect
-      callHandlers:
-        - function: swapOnUniswap(uint256,uint256,address[])
-          handler: handleSwapOnUniswap
-        - function: swapOnUniswapFork(address,bytes32,uint256,uint256,address[])
-          handler: handleSwapOnUniswapFork
-        - function: buyOnUniswap(uint256,uint256,address[])
-          handler: handleBuyOnUniswap
-        - function: buyOnUniswapFork(address,bytes32,uint256,uint256,address[])
-          handler: handleBuyOnUniswapFork
-        - function: swapOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
-          handler: handleSwapOnUniswapV2Fork
-        - function: swapOnUniswapV2ForkWithPermit(address,uint256,uint256,address,uint256[],bytes)
-          handler: handleSwapOnUniswapV2ForkWithPermit
-        - function: buyOnUniswapV2Fork(address,uint256,uint256,address,uint256[])
-          handler: handleBuyOnUniswapV2Fork
-        - function: buyOnUniswapV2ForkWithPermit(address,uint256,uint256,address,uint256[],bytes)
-          handler: handleBuyOnUniswapV2ForkWithPermit
-        - function: swapOnZeroXv2(address,address,uint256,uint256,address,bytes)
-          handler: handleSwapOnZeroXv2
-        - function: swapOnZeroXv2WithPermit(address,address,uint256,uint256,address,bytes,bytes)
-          handler: handleSwapOnZeroXv2WithPermit
-        - function: swapOnZeroXv4(address,address,uint256,uint256,address,bytes)
-          handler: handleSwapOnZeroXv4
-        - function: swapOnZeroXv4WithPermit(address,address,uint256,uint256,address,bytes,bytes)
-          handler: handleSwapOnZeroXv4WithPermit
       file: ./src/mappingV5.ts
-features:
-  - grafting
-graft:
-  base: QmdHs4YF6gnBWwfDmVDeYapTFrDY799vhRgTDqmo4MR3WR
-  block: 17472048
